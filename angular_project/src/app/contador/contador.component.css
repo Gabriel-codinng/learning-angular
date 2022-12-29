@@ -1,0 +1,36 @@
+.container{
+    border: gray solid 2px;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.botones{
+    margin-inline: 10px;
+}
+
+.botonMas{
+    width: 35px;
+    padding: 10px;
+    background-color: rgb(255, 255, 255);
+    border: 1px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px 1px rgb(202, 202, 202);
+}
+
+.botonMenos{
+    width: 35px;
+    padding: 10px;
+    background-color: rgb(255, 255, 255);
+    border: 1px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px 1px rgb(202, 202, 202);
+}
+
+.botonMenos:hover {
+    background-color: rgb(235, 234, 234);
+}
+
+.botonMas:hover {
+    background-color: rgb(235, 234, 234);
+}

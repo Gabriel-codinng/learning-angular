@@ -1,0 +1,17 @@
+<div class="container">
+  <input type="text" placeholder="Ingresa un nombre" #name />
+
+  <button (click)="mostrar_en_alert(name.value)">Mostrar Resultado</button>
+
+  <div class="alert" *ngIf="openAlert; else mensaje">
+    <p>El resultado se muestra por consola</p>
+    <button class="cancel" (click)="openAlert = !openAlert">
+        X
+    </button>
+  </div>
+
+  <!-- Es un elemento de angular para renderizar HTML, nunca se despliega directamente -->
+  <ng-template #mensaje>
+    Mensaje de prueba renderizado por "else"
+  </ng-template>
+</div>

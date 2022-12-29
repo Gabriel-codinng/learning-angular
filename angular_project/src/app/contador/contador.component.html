@@ -1,0 +1,20 @@
+<div class="container">
+  <h1>Contador creado por: {{ nombre }}</h1>
+  <!-- EVENTOS -->
+  <p>
+    Contador:
+    <span class="botones">
+      <button (click)="incrementar()" class="botonMas">+</button>
+    </span>
+    {{ value }}
+    <span class="botones">
+      <button (click)="decrementar()" class="botonMenos">-</button>
+    </span>
+  </p>
+
+  <!-- INTERFACES DE TYPESCRIPT -->
+  <p>
+    Probando una interfaz de TypeScript: Soy {{ persona.nombre }}, y tengo:
+    {{ persona.edad }} años
+  </p>
+</div>

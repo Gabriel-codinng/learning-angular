@@ -1,0 +1,24 @@
+<div class="container">
+    <h1>Enlace de clases</h1>
+    
+    <!-- <button [class.disabled]="button_disabled" class="botonRojo" (click)="class = 'red'">Rojo</button>
+    <button [class.disabled]="button_disabled" class="botonVerde" (click)="class = 'green'">Verde</button>
+    <button [class.disabled]="button_disabled" class="botonAzul" (click)="class = 'blue'">Azul</button> -->
+
+    <!-- Hay otra manera de agregar clases dinámicas a los distintos elementos HTML -->
+    <!-- La ventaja principal de asociar un objeto a la clase, es que se pueden especificar varias clases -->
+    
+    <button [class]="{
+        'disabled': button_disabled
+    }" [disabled]="button_disabled" class="botonRojo" (click)="class = 'red'">Rojo</button>
+    <button [class]="{
+        'disabled': button_disabled
+    }" [disabled]="button_disabled" class="botonVerde" (click)="class = 'green'">Verde</button>
+    <button [class]="{
+        'disabled': button_disabled
+    }" [disabled]="button_disabled" class="botonAzul" (click)="class = 'blue'">Azul</button>
+
+    <p [class]="class">Texto que va cambiar de color</p>
+
+    <button (click)="deshabilitar()" class="disabled_button">Activar/Desactivar</button>
+</div>

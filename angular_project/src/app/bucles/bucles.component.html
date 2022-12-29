@@ -1,0 +1,8 @@
+<div class="container">
+    <h1>Bucles ngFor</h1>
+    <ul>
+        <li *ngFor="let persona of personas; let i = index">
+            <p>{{i + 1}} - Nombre: {{persona.nombre}}, edad: {{persona.edad}}</p>
+        </li>
+    </ul>
+</div>
