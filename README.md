@@ -373,7 +373,7 @@ Para declararlas se utiliza el prefijo **"#"** o **"ref-"**.
 
 Ejemplo:
 
-Necesitamos identificar un input para acceder a su valor cuando realicemos carguemos el formulario.
+Necesitamos identificar un input para acceder a su valor cuando realicemos la carga del formulario.
 
 ```
 <input type="text" placeholder="Ingresa un nombre" #name />
@@ -451,7 +451,7 @@ Ejemplo:
 
 Se desea asociar el valor de la variable "dia", con un día de la semana, para eso establecemos un valor número para cada días (1 = Lunes, 2 = Martes, etc...)
 
-Según el valor númerico asignado a "día", se mostrará un día de la semana en la pantalla. 
+Según el valor númerico asignado a "día", se mostrará un día de la semana en la pantalla.
 
 ```
 <div [ngSwitch]="dia">
@@ -470,3 +470,139 @@ Según el valor númerico asignado a "día", se mostrará un día de la semana e
         <strong>ADVERTENCIA: </strong>
         Para poder evaluar una cadena de texto (un string), se deben utilizar las comillas simples: '' 
 </div>
+
+# Formularios 📋.
+
+Angular tiene dos enfoques para trabajar con formularios.
+
+1. Basados en Plantillas.
+
+   Toda la lógica del formulario va dentro de la plantilla. (Para formularios pequeños)
+
+   Para poder trabajar con formularios basados en plantillas, debemos importar en **app.module.ts** un módulo de Angular: **FormsModule**.
+
+   ```
+   import { FormsModule } from '@angular/forms';
+   ```
+
+   Y dentro de la propiedad "import" del decorador **@NgModule** agregamos en nuevo módulo.
+
+   ```
+   @NgModule({
+    declarations: [
+      AppComponent,
+      ContadorComponent,
+      BotonesComponent,
+      FormularioComponent,
+      BuclesComponent,
+      SwitchComponent,
+      Formulario2Component
+    ],
+    imports: [
+      BrowserModule,
+      FormsModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
+   })
+
+   export class AppModule { }
+   ```
+
+   Este nuevo módulo también integra la capacidad de deshabilitar automáticamente, el comportamiento por defecto de un formulario, evitando así que cuando pulsemos un botón no envíe el formulario y no refresque la pantalla.
+
+   En el componente donde alojaremos el formulario, dentro de su plantilla html, definiremos un formulario.
+
+   Para enlazar una variable con el valor de un input, utilizamos la directiva **ngModel**, y la asignamos a una variable, en el siguiente caso, la propiedad "nombre" y "edad" de un objeto "persona".
+
+   ```
+   <form (ngSubmit)="submit()" class="card">
+        <div class="input-container">
+            <label class="label" for="">Nombre:</label>
+            <!-- Es importante que si utilizamos la directiva ngModel, definamos la propiedad "name" en el input -->
+            <input type="text" name="nombre" placeholder="Ingrese un nombre" [(ngModel)]="persona.nombre">
+        </div>
+
+        <div class="input-container">
+            <label class="label" for="">Edad:</label>
+            <input type="text" name="edad" placeholder="Ingrese una edad" [(ngModel)]="persona.edad">
+        </div>
+
+        <button>
+            Enviar
+        </button>
+    </form>
+   ```
+
+   Por su parte, la directiva **ngSubmit**, nos permite alterar el comportamiento por defecto del formulario, siendo este un evento que se acciona cuando el usuario presiona un botón dentro del formulario.
+
+   Cuando el botón es pulsado, la directiva determina que acción se ejecuta, siendo esta acción un metodó que en el caso mostrado se denomina "submit()".
+
+2. Reactivos.
+
+   Esencialmente separa la lógica de la vista.
+
+# Validaciones ✔.
+
+Al agregar una variable de plantilla a los inputs, podemos acceder a todas sus características, siendo una de esta **"valid"**.
+
+La característica **valid** determina si todos los requerimientos estan satisfechos devolviendo un booleano dependiendo de si estan satisfechos (true) y si no lo están (false).
+
+Además, podemos encontrar que Angular, agrega una serie de clases a nuestros inputs, que definen características de estos mismo, como por ejemplo:
+
+- ng-untouched -> ng-touched
+
+  Indican que un input no ha sido seleccionado por el usuario y posteriormente lo ha seleccionado.
+
+- ng-pristine -> ng-dirty
+
+  Indican cuando un input pasa de estar vacío, a tener algún tipo de valor.
+
+- ng-invalid -> ng-valid
+
+  Determina si un input cumple todas las reglas de validación.
+
+Ejemplo de validación:
+
+A un input, le agregamos la propiedad "required" para hacerlo un campo obligatorio, también le asignaremos una varible de plantilla para poder acceder a las propiedades del elemento.
+
+```
+<input
+   type="text"
+   name="nombre"
+   placeholder="Ingrese un nombre"
+   [(ngModel)]="persona.nombre"
+   required
+   #name="ngModel"
+/>
+```
+
+Resulta que a través de la variable de plantilla, puedo acceder a los errores del input mediante la interpolación.
+
+```
+{{ name.errors | json }}
+```
+
+También puedo acceder a la clases que Angular asigna dentro de los inputs para definer sus estados.
+
+```
+ {{ name.valid }}
+  <br />
+  {{ name.touched }}
+  <br />
+  {{ name.pristine }}
+```
+
+Por lo tanto, puedo también definir en que momento deseo mostrar en pantalla un error de la siguiente forma:
+
+```
+<div [hidden]="name.valid === true || (name.pristine === true && name.touched === false)" class="danger">
+  El nombre es obligatorio
+</div>
+```
+
+Accediendo a la propiedad "hidden", puede definir una condición para que mantenga oculto el error.
+
+En caso de que el input este vacío, y de que haya sido tocado, muestra el error.
+
+O si existe la validación y es correcta. 

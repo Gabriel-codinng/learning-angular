@@ -1,0 +1,58 @@
+<div class="container">
+  <form (ngSubmit)="submit()" class="card">
+    <div class="input-container">
+      <label class="label" for="">Nombre:</label>
+      <!-- Es importante que si utilizamos la directiva ngModel, definamos la propiedad "name" en el input -->
+      <input
+        type="text"
+        name="nombre"
+        placeholder="Ingrese un nombre"
+        [(ngModel)]="persona.nombre"
+        required
+        #name="ngModel"
+      />
+    </div>
+
+    <div
+      [hidden]="
+        name.valid || (name.pristine === true && name.untouched === true)
+      "
+      class="danger"
+    >
+      El nombre es obligatorio
+    </div>
+
+    <div class="input-container">
+      <label class="label" for="">Edad:</label>
+      <input
+        type="text"
+        name="edad"
+        placeholder="Ingrese una edad"
+        [(ngModel)]="persona.edad"
+        required
+        #age="ngModel"
+      />
+    </div>
+
+    <div
+      [hidden]="age.valid === true || (age.pristine === true && age.touched === false)"
+      class="danger"
+    >
+      La edad es obligatoria
+    </div>
+
+    <button>Enviar</button>
+  </form>
+
+  <!-- PIPES: Con los pipes podemos especificar en que formato muestra la información que se interpola -->
+  {{ persona | json }}
+  <br />
+  {{ name.valid }}
+  <br />
+  {{ name.touched }}
+  <br />
+  {{ name.pristine }}
+  <br />
+  {{ name.errors | json }}
+
+</div>
