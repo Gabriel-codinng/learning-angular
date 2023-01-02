@@ -1,0 +1,17 @@
+.container{
+    border: gray solid 2px;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+ul{
+    list-style-type: none;
+}
+
+.city{
+    margin-top: 20px;
+    background: rgb(218, 216, 216);
+    padding: 10px;
+    border-radius: 10px;
+}

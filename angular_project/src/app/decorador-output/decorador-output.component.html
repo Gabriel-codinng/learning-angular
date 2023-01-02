@@ -1,0 +1,12 @@
+<div class="container">
+    <h1>Decorador @Output</h1>
+    <p>Una lista de ciudades</p>
+    <ul>
+        <li>
+            <app-form-output (newCityEvent)="addNewCity($event)" ></app-form-output>
+        </li>
+        <li class="city" *ngFor="let city of cities">
+            {{city}}
+        </li>
+    </ul>
+</div>

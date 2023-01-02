@@ -18,6 +18,8 @@ import { Formulario2Component } from './formulario2/formulario2.component';
 //Este módulo también deshabilita el envio de formularios.
 import { FormsModule } from '@angular/forms';
 import { DecoradorInputComponent } from './decorador-input/decorador-input.component';
+import { DecoradorOutputComponent } from './decorador-output/decorador-output.component';
+import { FormOutputComponent } from './form-output/form-output.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { DecoradorInputComponent } from './decorador-input/decorador-input.compo
     BuclesComponent,
     SwitchComponent,
     Formulario2Component,
-    DecoradorInputComponent
+    DecoradorInputComponent,
+    DecoradorOutputComponent,
+    FormOutputComponent
   ],
   imports: [
     BrowserModule,

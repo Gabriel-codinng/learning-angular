@@ -285,6 +285,7 @@ Una vez definidos los botones en la plantilla html de nuestro componente, ingres
 <button (click)="">+</button>
 <button (click)="">-</button>
 ```
+
 Para mantener un código más limpio, haremos que los botones ejecuten un metódo definido en la clase del componente
 
 ```
@@ -323,7 +324,7 @@ También es posible que quieras acceder al objeto "event".
 <!-- En la clase del componente -->
 
 export class ContadorComponent {
-  
+
   //Escuchando el evento
   onClick(event:Event): void{
     console.log('Event -> ', event)
@@ -624,7 +625,7 @@ Accediendo a la propiedad "hidden", puede definir una condición para que manten
 
 En caso de que el input este vacío, y de que haya sido tocado, muestra el error.
 
-O si existe la validación y es correcta. 
+O si existe la validación y es correcta.
 
 # Ciclos de vida 🔄.
 
@@ -713,6 +714,7 @@ Angular nos permite a través de ciertos métodos, acceder a estos ciclos de vid
 
         Este ciclo de vida se suele trabajar con el decorador ViewChild.
     </td>
+
   </tr>
   <tr>
     <td>
@@ -761,15 +763,15 @@ export class AppComponent implements OnChanges, OnInit, OnDestroy {
 
 Con los métodos, podremos acceder a los distintos estados del componente.
 
-# Decorador @Input.
+# Decorador @Input().
 
 Un decorador es un tipo especial de declaración que se puede adjuntar a una:
 
-  * Clase.
-  * Método.
-  * Descriptor de acceso.
-  * Propiedad.
-  * Parámetro.
+- Clase.
+- Método.
+- Descriptor de acceso.
+- Propiedad.
+- Parámetro.
 
 El decorador módifica el comportamiento a través de una configuración que se le pueda pasar.
 
@@ -778,6 +780,88 @@ Los decoradores se invocan añadiendo el prefijo "@" + nombre del decorador ().
 Un ejemplo es el decorador @Input().
 
 ---
+
 ## Definición:
 
 El decorador @Input() en un componente hijo (incluso en una directiva) **indica que la propiedad recibirá un valor del padre**.
+
+---
+
+# Decorador @Output().
+
+El decorador @Output() es un componente (o directiva) hijo que permite **pasar datos del componente hijo al padre**.
+
+Ejemplo práctico:
+
+Dado un array que representa una lista de ciudades y se renderiza en bucle, agregemos un método que introduzca una nueva ciudad a partir de un formulario.
+
+```
+export class DecoradorOutputComponent {
+  cities: Array<string> = ['NYC', 'Madrid', 'Barcelona']
+
+  addNewCity(city: string): void{
+    this.cities.push(city);
+  }
+}
+```
+
+El metódo para añadir una nueva ciudad lo definimos en el componente que renderiza la lista.
+
+Pero el formulario será un componente independiente.
+
+```
+<!-- HTML -->
+<form action="">
+    <label for="newCity">Nombre de la Ciudad: </label>
+    <input class="input" id="newCity" type="text" #newCity>
+    <button class="submit" (click)="onAddnewCity(newCity.value)" type="button" >Añadir nueva ciudad</button>
+</form>
+
+<!-- COMPONENTE FORMULARIO -->
+
+import { Component, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-form-output',
+  templateUrl: './form-output.component.html',
+  styleUrls: ['./form-output.component.css']
+})
+
+export class FormOutputComponent {
+
+  @Output() newCityEvent = new EventEmitter<string>();
+
+  onAddnewCity(city: string): void{
+    console.log('Item ->', city)
+    this.newCityEvent.emit(city)
+  }
+}
+```
+
+Para emitir un dato desde el componente hijo, debemos importar el decorador **Output** y la clase **EventEmitter**.
+
+Definimos una variable con el decorador **@Output()**, esta variable la emitiremos al componente padre.
+
+```
+  @Output() newCityEvent = new EventEmitter<string>();
+```
+
+Luego de definir la variable que vamos a emitir, ejecutamos la emisión de esta misma con el método **emit()** pasando el valor de la ciudad.
+
+```
+onAddnewCity(city: string): void{
+  console.log('Item ->', city)
+  this.newCityEvent.emit(city)
+}
+```
+
+En el componente padre que renderiza la lista, **definimos un evento con el nombre de la variable al que se le aplico el decorador @Output()**, en nuestro caso, le indicamos que cuando escuche la emisión, ejecute el método que añadira la nueva ciudad a la lista.
+
+**$event** solo contiene el string que se recoge en el input del formulario.
+
+```
+<app-form-output (newCityEvent)="addNewCity($event)" ></app-form-output>
+```
+
+
+
