@@ -1,9 +1,10 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-form-output',
   templateUrl: './form-output.component.html',
-  styleUrls: ['./form-output.component.css']
+  styleUrls: ['./form-output.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class FormOutputComponent {
@@ -13,5 +14,10 @@ export class FormOutputComponent {
   onAddnewCity(city: string): void{
     console.log('Item ->', city)
     this.newCityEvent.emit(city)
+  }
+
+  counterRender(): boolean{
+    console.log('Render Form')
+    return true
   }
 }

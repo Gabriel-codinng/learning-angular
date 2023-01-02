@@ -863,5 +863,48 @@ En el componente padre que renderiza la lista, **definimos un evento con el nomb
 <app-form-output (newCityEvent)="addNewCity($event)" ></app-form-output>
 ```
 
+# Change Detection (Mecanismo de detección de cambio).
+
+Es el mecanismo o estrategia de detección de cambios que utiliza Angular para saber cuando debe actualizar un componente o toda la vista en caso de que la información haya cambiado.
+
+## Lo que produce estos cambios.
+
+* Eventos del ratón.
+* Llamadas Ajax.
+* setInterval.
+* setTimeOut.
+## 2 estrategias:
+
+**OnePush**: establece la estrategia en CheckOnce (bajo demanda).
+   * Con esta estrategia se determina cuando se desea realizar el cambio.
+
+**Default**: establce la estrategia en CheckAlways.
+   * Revisa cuando la vista o el modelo cambian para actualizarse, haciendo que Angular revise constantemente si se han producido cambios.
 
 
+Ejemplo:
+
+El problema esta en que Angular aplica la estrategia en la que por defecto, cuando este interpreta que se produce un pequeño cambio, actualiza todo los componentes desde su raíz.
+
+Es nuestra labor por ende, definir e indicar a Angular cuando debe actualizar el modelo o la vista, básicamente **nosotros trabajaremos con la estrategia OnePush**.
+
+Para ello, **debemos fijarnos en los componentes que reciben un input o un output**.
+
+    ADVERTENCIA: Si tu componente el cual recibe inputs o outpus o los dos, es un componente hijo de uno padre que no recibe ni inputs ni outputs o sí lo hace, entonces debes aplicarle el cambió de estrategía también al padre.
+
+Paraa cambiar la estrategia de renderizado, es tan sencillo como aplicarle una directiva en la clase componente:
+
+```
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+
+@Component({
+  selector: 'app-decorador-output',
+  templateUrl: './decorador-output.component.html',
+  styleUrls: ['./decorador-output.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+```
+
+```
+changeDetection: ChangeDetectionStrategy.OnPush
+```

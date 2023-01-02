@@ -2,4 +2,5 @@
     <label for="newCity">Nombre de la Ciudad: </label>
     <input class="input" id="newCity" type="text" #newCity>
     <button class="submit" (click)="onAddnewCity(newCity.value)" type="button" >Añadir nueva ciudad</button>
+    <p>Count: {{counterRender()}}</p>
 </form>
