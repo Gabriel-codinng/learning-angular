@@ -285,7 +285,6 @@ Una vez definidos los botones en la plantilla html de nuestro componente, ingres
 <button (click)="">+</button>
 <button (click)="">-</button>
 ```
-
 Para mantener un código más limpio, haremos que los botones ejecuten un metódo definido en la clase del componente
 
 ```
@@ -310,6 +309,26 @@ Luego asociamos los evenetos a sus correspodientes metodos, y ahí lo tendríamo
 ```
 <button (click)="incrementar()">+</button>
 <button (click)="decrementar()">-</button>
+```
+
+También es posible que quieras acceder al objeto "event".
+
+```
+<!-- En el template HTML del componente -->
+
+<button (click)="onClick($event)" class="boton">
+  Escuchando el evento click
+</button>
+
+<!-- En la clase del componente -->
+
+export class ContadorComponent {
+  
+  //Escuchando el evento
+  onClick(event:Event): void{
+    console.log('Event -> ', event)
+  }
+}
 ```
 
 # Enlace de Clases 📞.
@@ -606,3 +625,159 @@ Accediendo a la propiedad "hidden", puede definir una condición para que manten
 En caso de que el input este vacío, y de que haya sido tocado, muestra el error.
 
 O si existe la validación y es correcta. 
+
+# Ciclos de vida 🔄.
+
+Los ciclos de vida definen los distintos estados de un componente desde su creación hasta su destrucción.
+
+Angular nos permite a través de ciertos métodos, acceder a estos ciclos de vida.
+
+<table>
+  <tr>
+    <td>
+        Interfaz
+    </td>
+    <td>
+        Método
+    </td>
+    <td>
+        Descripción
+    </td>
+  </tr>
+  <tr>
+    <td>
+        OnChanges
+    </td>
+    <td>
+        ngOnChanges
+    </td>
+    <td>
+        Es llamado cuando el valor de un enlace input o output cambía 
+    </td>
+  </tr>
+  <tr>
+    <td>
+        OnInit
+    </td>
+    <td>
+        ngOnInit
+    </td>
+    <td>
+        Va justo después de ngOnChanges. 
+        Suelen hacerse penticiones a una API.
+        Iniciar métodos que se requieren antes de cargar el componente.
+    </td>
+  </tr>
+  <tr>
+    <td>
+        DoCheck
+    </td>
+    <td>
+        ngDoCheck
+    </td>
+    <td>
+        Sirve para detectar los cambios personalizados. 
+    </td>
+  </tr>
+  <tr>
+    <td>
+        AfterContentInit
+    </td>
+    <td>
+        ngAfterContentInit
+    </td>
+    <td>
+        Después de que el contenido del componente se ha inicializado. 
+    </td>
+  </tr>
+  <tr>
+    <td>
+        AfterContentChecked
+    </td>
+    <td>
+        ngAfterContentChecked
+    </td>
+    <td>
+        Después de cada comprobación del contenido del componente. 
+    </td>
+  </tr>
+  <tr>
+    <td>
+        AfterViewInit
+    </td>
+    <td>
+        ngAfterViewInit
+    </td>
+    <td>
+        Después de que las vistas del componente son inicializadas.
+
+        Este ciclo de vida se suele trabajar con el decorador ViewChild.
+    </td>
+  </tr>
+  <tr>
+    <td>
+        AfterViewChecked
+    </td>
+    <td>
+        ngAfterViewChecked
+    </td>
+    <td>
+        Después de comprobar las vistas del componente. 
+    </td>
+  </tr>
+  <tr>
+    <td>
+        OnDestroy
+    </td>
+    <td>
+        ngOnDestroy
+    </td>
+    <td>
+        Se ejecuta justo antes de que la directiva sea destruida. 
+    </td>
+  </tr>
+</table>
+
+Ejemplo:
+
+```
+export class AppComponent implements OnChanges, OnInit, OnDestroy {
+  title = 'angular_project';
+
+  // No se ejecuta porque no hay ni input ni output
+  ngOnChanges(changes: SimpleChanges):void {
+    console.log('Change ->', changes)
+  }
+
+  ngOnInit(): void {
+    console.log('OnInit ->')
+  }
+
+  ngOnDestroy(): void {
+    console.log('Destroy')
+  }
+}
+```
+
+Con los métodos, podremos acceder a los distintos estados del componente.
+
+# Decorador @Input.
+
+Un decorador es un tipo especial de declaración que se puede adjuntar a una:
+
+  * Clase.
+  * Método.
+  * Descriptor de acceso.
+  * Propiedad.
+  * Parámetro.
+
+El decorador módifica el comportamiento a través de una configuración que se le pueda pasar.
+
+Los decoradores se invocan añadiendo el prefijo "@" + nombre del decorador ().
+
+Un ejemplo es el decorador @Input().
+
+---
+## Definición:
+
+El decorador @Input() en un componente hijo (incluso en una directiva) **indica que la propiedad recibirá un valor del padre**.

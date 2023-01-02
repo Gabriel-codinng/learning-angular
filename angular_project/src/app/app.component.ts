@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +23,19 @@ import { Component } from '@angular/core';
 //   `]
 // })
 
-export class AppComponent {
+export class AppComponent implements OnChanges, OnInit, OnDestroy {
   title = 'angular_project';
+
+  // No se ejecuta porque no hay ni input ni output
+  ngOnChanges(changes: SimpleChanges):void {
+    console.log('Change ->', changes)
+  }
+
+  ngOnInit(): void {
+    console.log('OnInit ->')
+  }
+
+  ngOnDestroy(): void {
+    console.log('Destroy')
+  }
 }

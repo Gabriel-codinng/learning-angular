@@ -26,4 +26,9 @@ export class ContadorComponent {
   incrementar(){
     this.value++
   }
+
+  //Escuchando el evento
+  onClick(event:Event): void{
+    console.log('Event -> ', event)
+  }
 }
