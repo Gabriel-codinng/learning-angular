@@ -6,8 +6,8 @@
             <app-form-output (newCityEvent)="addNewCity($event)" ></app-form-output>
         </li>
         <li class="city" *ngFor="let city of cities">
-            {{city}}
-            <p>Counter: {{counterRender()}}</p>
+            {{city | titlecase}}
+            <!-- <p>Counter: {{counterRender()}}</p> -->
         </li>
     </ul>
 </div>

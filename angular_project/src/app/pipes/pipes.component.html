@@ -1,0 +1,18 @@
+<div class="container">
+    <h1>Pipes</h1>
+    <p>{{ name | titlecase}}</p>
+    <p>{{ date | date:'full'}}</p>
+    <p>{{ date | date:'full' | uppercase}}</p>
+    <p>{{'999' | currency:'EUR'}}</p>
+    <p>{{'999' | currency}}</p>
+
+    <div>
+        <input class="input" type="text" placeholder="filter" [(ngModel)]="criteria">
+    </div>
+
+    <ul>
+        <li *ngFor="let nombre of (nombres | filter:criteria)">
+            {{nombre}}
+        </li>
+    </ul>
+</div>

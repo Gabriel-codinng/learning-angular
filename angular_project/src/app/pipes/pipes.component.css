@@ -1,0 +1,21 @@
+.container{
+    border: gray solid 2px;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+p{
+    display: block;
+}
+
+.input{
+    border: gray solid 1px;
+    border-radius: 20px;
+    padding: 5px;
+    width: 100%;
+}
+
+ul{
+    list-style: none;
+}

@@ -20,6 +20,8 @@ import { FormsModule } from '@angular/forms';
 import { DecoradorInputComponent } from './decorador-input/decorador-input.component';
 import { DecoradorOutputComponent } from './decorador-output/decorador-output.component';
 import { FormOutputComponent } from './form-output/form-output.component';
+import { PipesComponent } from './pipes/pipes.component';
+import { FilterPipe } from './helper-pipes/filter.pipe';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { FormOutputComponent } from './form-output/form-output.component';
     Formulario2Component,
     DecoradorInputComponent,
     DecoradorOutputComponent,
-    FormOutputComponent
+    FormOutputComponent,
+    PipesComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,

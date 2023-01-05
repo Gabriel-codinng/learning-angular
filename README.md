@@ -869,18 +869,20 @@ Es el mecanismo o estrategia de detección de cambios que utiliza Angular para s
 
 ## Lo que produce estos cambios.
 
-* Eventos del ratón.
-* Llamadas Ajax.
-* setInterval.
-* setTimeOut.
+- Eventos del ratón.
+- Llamadas Ajax.
+- setInterval.
+- setTimeOut.
+
 ## 2 estrategias:
 
 **OnePush**: establece la estrategia en CheckOnce (bajo demanda).
-   * Con esta estrategia se determina cuando se desea realizar el cambio.
+
+- Con esta estrategia se determina cuando se desea realizar el cambio.
 
 **Default**: establce la estrategia en CheckAlways.
-   * Revisa cuando la vista o el modelo cambian para actualizarse, haciendo que Angular revise constantemente si se han producido cambios.
 
+- Revisa cuando la vista o el modelo cambian para actualizarse, haciendo que Angular revise constantemente si se han producido cambios.
 
 Ejemplo:
 
@@ -892,7 +894,7 @@ Para ello, **debemos fijarnos en los componentes que reciben un input o un outpu
 
     ADVERTENCIA: Si tu componente el cual recibe inputs o outpus o los dos, es un componente hijo de uno padre que no recibe ni inputs ni outputs o sí lo hace, entonces debes aplicarle el cambió de estrategía también al padre.
 
-Paraa cambiar la estrategia de renderizado, es tan sencillo como aplicarle una directiva en la clase componente:
+Para cambiar la estrategia de renderizado, es tan sencillo como aplicarle una directiva en la clase componente:
 
 ```
 import { Component, ChangeDetectionStrategy } from '@angular/core';
@@ -908,3 +910,82 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 ```
 changeDetection: ChangeDetectionStrategy.OnPush
 ```
+
+# Pipes.
+
+Los pipes reciben un dato y su objetivo es transformar ese dato.
+
+Pueden ser:
+
+- Puros (por defecto): Hasta que el dato de entrada no cambia, Angular no realiza la tranformación.
+- Impuros: Cada vez que Angular ejecuet el _"changeDetection"_ volvere a tranformar ese dato.
+
+Para crear un pipe a través del CLI, utilizamos el comando:
+
+```
+ng g p nombre_pipe
+```
+
+Esto generará un directorio llamado "pipes" que almacenará dos archivos, uno para el testing y otro que almacenará la lógica del pipe.
+
+El archivo que almacena la lógica de nuestro pipe sería así:
+
+```
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'filter',
+})
+
+export class FilterPipe implements PipeTransform {
+
+  transform(values: any, arg: any) {
+  }
+
+}
+```
+
+Dentro del método "tranform" recibimos los valores que queremos transformar y el argumento que condiciona la transformación.
+
+```
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'filter',
+})
+
+export class FilterPipe implements PipeTransform {
+
+  transform(values: string[], arg: string): string[] {
+
+    if(!arg || arg?.length < 3) return values
+
+    const result = values.map((element) => {
+      return element.toLowerCase().indexOf(arg.toLowerCase()) > -1 ? element : ''
+    })
+
+    return result
+  }
+
+}
+```
+
+El siguiente código recibe un array de strings y toma como argumento otro string. Recorremos el array con el método "map", si el argumento esta vacío o su longitud es menor de 3 caracteres rentornara el array.
+
+En caso contrario, realizará una búsqueda del elemento a partir del arugmento dado y devolverá el resultado.
+
+```
+<div>
+  <input class="input" type="text" placeholder="filter" [(ngModel)]="criteria">
+</div>
+
+<ul>
+  <li *ngFor="let nombre of (nombres | filter:criteria)">
+    {{nombre}}
+  </li>
+</ul>
+```
+
+Aplicamos el pipe como cualquier otro, en este caso, determinamos el nombre del pipe como "filter", a través de la variable "criteria" enlazada con un input.
+
+El resultado es un array filtrado.
