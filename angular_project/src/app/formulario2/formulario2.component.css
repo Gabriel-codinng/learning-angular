@@ -44,10 +44,52 @@ button{
     border-radius: 10px;
 }
 
-.danger{
-    background-color: rgb(255, 201, 201);
-    color: red;
+button:hover{
+    transition-property: all;
+    transition-duration: 100ms;
+    background-color: rgb(15, 71, 255);
+}
+
+.input-container2{
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.label2{
     margin-top: 10px;
+}
+
+.check{
+    margin-top: 10px;
+    margin-left: 10px;
+    display: flex;
+    justify-content: start;
+}
+
+.input-check{
     padding: 10px;
-    border-radius: 10px;
+}
+
+.select{
+    margin-top: 5px;
+    width: 100%;
+    padding: 8px;
+    background-color: transparent;
+    border: 1px solid rgb(227, 227, 227);
+    border-radius: 5px;
+}
+
+.textarea{
+    margin-top: 5px;
+    width: 100%;
+    padding: 5px;
+    background-color: transparent;
+    border: 1px solid rgb(227, 227, 227);
+    border-radius: 5px;
+}
+
+.danger{
+    color: rgb(218, 0, 0);
+    margin-top: 10px;
 }

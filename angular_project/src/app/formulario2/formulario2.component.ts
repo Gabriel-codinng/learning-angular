@@ -1,5 +1,14 @@
 import { JsonPipe } from '@angular/common';
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+
+interface PersonaForm {
+  "nombre": string,
+  "edad": string,
+  "checkWork": boolean,
+  "ciudad": string,
+  "opinion": string
+}
 
 @Component({
   selector: 'app-formulario2',
@@ -7,13 +16,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./formulario2.component.css']
 })
 export class Formulario2Component {
-  
-  persona = {
-    nombre: '',
-    edad: ''
+
+  persona: PersonaForm = {
+    "nombre": '',
+    "edad": '',
+    "checkWork": false,
+    "ciudad": '',
+    "opinion": '',  
   }
 
-  submit(){
-    alert(JSON.stringify(this.persona))
+  onSubmit(form: NgForm): void {
+    // alert('Form values ' + JSON.stringify (values))
+    console.log(form)
+
   }
 }

@@ -533,30 +533,150 @@ Angular tiene dos enfoques para trabajar con formularios.
 
    En el componente donde alojaremos el formulario, dentro de su plantilla html, definiremos un formulario.
 
-   Para enlazar una variable con el valor de un input, utilizamos la directiva **ngModel**, y la asignamos a una variable, en el siguiente caso, la propiedad "nombre" y "edad" de un objeto "persona".
+   Para enlazar una variable con el valor de un input, utilizamos la directiva **ngModel**, en la propiedad "name" de los campos del formulario, asignaremos el identificador de dicho campo.
+
+   En la etiqueta form crearemos una variable de plantilla _"#contactForm"_ y la asignaremos a la directiva _ngForm_
 
    ```
-   <form (ngSubmit)="submit()" class="card">
-        <div class="input-container">
-            <label class="label" for="">Nombre:</label>
-            <!-- Es importante que si utilizamos la directiva ngModel, definamos la propiedad "name" en el input -->
-            <input type="text" name="nombre" placeholder="Ingrese un nombre" [(ngModel)]="persona.nombre">
-        </div>
+   <form (ngSubmit)="onSubmit(contactForm.value)" #contactForm="ngForm" class="card">
+    <pre>{{ contactForm.value | json }}</pre>
+    <div class="input-container">
+      <label class="label" for="nombre">Nombre:</label>
+      <!-- Es importante que si utilizamos la directiva ngModel, definamos la propiedad "name" en el input -->
+      <input
+        type="text"
+        name="nombre"
+        placeholder="Ingrese un nombre"
+        ngModel
+        required
+      />
+    </div>
 
-        <div class="input-container">
-            <label class="label" for="">Edad:</label>
-            <input type="text" name="edad" placeholder="Ingrese una edad" [(ngModel)]="persona.edad">
-        </div>
+    <div class="input-container">
+      <label class="label" for="edad">Edad:</label>
+      <input
+        type="text"
+        name="edad"
+        placeholder="Ingrese una edad"
+        ngModel
+        required
+      />
+    </div>
 
-        <button>
-            Enviar
-        </button>
-    </form>
+    <div class="input-container">
+      <label class="label2" for="checkWork"
+        ><p style="width: 50%">¿Estas trabajando actualmente?</p>
+        <!-- Es importante que si utilizamos la directiva ngModel, definamos la propiedad "name" en el input -->
+        <input
+          required
+          class="check"
+          type="checkbox"
+          name="checkWork"
+          ngModel
+          required
+        />
+      </label>
+    </div>
+
+    <div class="input-container">
+      <label class="label" for="ciudad">¿En que ciudad vives?</label>
+      <select required class="select" name="ciudad" id="ciudad" ngModel>
+        <option value="NYC">NYC</option>
+        <option value="Madrid">Madrid</option>
+        <option value="Barcelona">Barcelona</option>
+      </select>
+    </div>
+
+    <div class="input-container">
+      <label class="label" for="textarea">Dejanos tu opinión</label>
+      <textarea
+        class="textarea"
+        name="opinion"
+        id="opinion"
+        cols="30"
+        rows="10"
+        ngModel
+      ></textarea>
+    </div>
+
+    <button type="submit">Enviar</button>
+   </form>
    ```
 
    Por su parte, la directiva **ngSubmit**, nos permite alterar el comportamiento por defecto del formulario, siendo este un evento que se acciona cuando el usuario presiona un botón dentro del formulario.
 
-   Cuando el botón es pulsado, la directiva determina que acción se ejecuta, siendo esta acción un metodó que en el caso mostrado se denomina "submit()".
+   Cuando el botón es pulsado, la directiva determina que acción se ejecuta, siendo esta acción un metodó que en el caso mostrado se denomina "onSubmit()".
+
+   ***
+
+   Existirán casos en donde hagamos una petición a una API y requerira editar la información dada, para eso necesitamos enlazar la información dada con los campos del formulario.
+
+   Inicializando un objeto que almacene la información dada en sus propiedades, permitiría acceder a estas propiedades enlazandolas con la directiva _"ngModel"_
+
+   ```
+      <form (ngSubmit)="onSubmit(contactForm.value)" #contactForm="ngForm" class="card">
+    <pre>{{ contactForm.value | json }}</pre>
+    <div class="input-container">
+      <label class="label" for="">Nombre:</label>
+      <!-- Es importante que si utilizamos la directiva ngModel, definamos la propiedad "name" en el input -->
+      <input
+        type="text"
+        name="nombre"
+        placeholder="Ingrese un nombre"
+        [(ngModel)]="persona.nombre"
+        required
+      />
+    </div>
+
+    <div class="input-container">
+      <label class="label" for="">Edad:</label>
+      <input
+        type="text"
+        name="edad"
+        placeholder="Ingrese una edad"
+        [(ngModel)]="persona.edad"
+        required
+      />
+    </div>
+
+    <div class="input-container">
+      <label class="label2" for="checkWork"
+        ><p style="width: 50%">¿Estas trabajando actualmente?</p>
+        <input
+          required
+          class="check"
+          type="checkbox"
+          name="checkWork"
+          [(ngModel)]="persona.checkWork"
+          required
+        />
+      </label>
+    </div>
+
+    <div class="input-container">
+      <label class="label" for="ciudad">¿En que ciudad vives?</label>
+      <select required class="select" name="ciudad" id="ciudad" [(ngModel)]="persona.ciudad">
+        <option value="NYC">NYC</option>
+        <option value="Madrid">Madrid</option>
+        <option value="Barcelona">Barcelona</option>
+      </select>
+    </div>
+
+    <div class="input-container">
+      <label class="label" for="textarea">Dejanos tu opinión</label>
+      <textarea
+        class="textarea"
+        name="opinion"
+        id="opinion"
+        cols="30"
+        rows="10"
+        [(ngModel)]="persona.opinion"
+      ></textarea>
+    </div>
+
+    <button type="submit">Enviar</button>
+   </form>
+   ```
 
 2. Reactivos.
 
@@ -588,12 +708,12 @@ A un input, le agregamos la propiedad "required" para hacerlo un campo obligator
 
 ```
 <input
-   type="text"
-   name="nombre"
-   placeholder="Ingrese un nombre"
-   [(ngModel)]="persona.nombre"
-   required
-   #name="ngModel"
+  type="text"
+  name="nombre"
+  placeholder="Ingrese un nombre"
+  [(ngModel)]="persona.nombre"
+  required
+  #name="ngModel"
 />
 ```
 

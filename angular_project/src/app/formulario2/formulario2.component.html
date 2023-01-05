@@ -1,5 +1,12 @@
 <div class="container">
-  <form (ngSubmit)="submit()" class="card">
+  <h1>Formulario basado en plantilla</h1>
+  <!-- (ngSubmit)="submit()" -->
+  <form
+    (ngSubmit)="onSubmit(contactForm)"
+    #contactForm="ngForm"
+    class="card"
+  >
+    <pre>{{ contactForm.value | json }}</pre>
     <div class="input-container">
       <label class="label" for="">Nombre:</label>
       <!-- Es importante que si utilizamos la directiva ngModel, definamos la propiedad "name" en el input -->
@@ -11,15 +18,15 @@
         required
         #name="ngModel"
       />
-    </div>
-
-    <div
-      [hidden]="
-        name.valid || (name.pristine === true && name.untouched === true)
-      "
-      class="danger"
-    >
-      El nombre es obligatorio
+      <!-- Validación -->
+      <div
+        [hidden]="
+          name.valid || (name.pristine === true && name.untouched === true)
+        "
+        class="danger"
+      >
+        El nombre es obligatorio
+      </div>
     </div>
 
     <div class="input-container">
@@ -29,23 +36,79 @@
         name="edad"
         placeholder="Ingrese una edad"
         [(ngModel)]="persona.edad"
-        required
         #age="ngModel"
+        required
       />
+      <!-- Validación -->
+      <div
+        [hidden]="
+          age.valid === true || (age.pristine === true && age.touched === false)
+        "
+        class="danger"
+      >
+        La edad es obligatoria
+      </div>
     </div>
 
-    <div
-      [hidden]="age.valid === true || (age.pristine === true && age.touched === false)"
-      class="danger"
-    >
-      La edad es obligatoria
+    <div class="input-container2">
+      <label class="label2" for="checkWork">
+        ¿Estas trabajando actualmente?
+      </label>
+      <div class="check">
+        <input
+        required
+        class="input-check"
+        type="checkbox"
+        name="checkWork"
+        [(ngModel)]="persona.checkWork"
+        required
+      />
+      </div>
     </div>
 
-    <button>Enviar</button>
+    <div class="input-container">
+      <label class="label" for="ciudad">¿En que ciudad vives?</label>
+      <select
+        required
+        class="select"
+        name="ciudad"
+        id="ciudad"
+        [(ngModel)]="persona.ciudad"
+        #select="ngModel"
+      >
+        <option value="NYC">NYC</option>
+        <option value="Madrid">Madrid</option>
+        <option value="Barcelona">Barcelona</option>
+      </select>
+      <!-- Validación -->
+      <div
+        [hidden]="
+          select.valid === true ||
+          (select.pristine === true && select.touched === false)
+        "
+        class="danger"
+      >
+        La ciudad es obligatoria
+      </div>
+    </div>
+
+    <div class="input-container">
+      <label class="label" for="textarea">Dejanos tu opinión</label>
+      <textarea
+        class="textarea"
+        name="opinion"
+        id="opinion"
+        cols="30"
+        rows="10"
+        [(ngModel)]="persona.opinion"
+      ></textarea>
+    </div>
+
+    <button type="submit" [disabled]="contactForm.invalid">Enviar</button>
   </form>
 
   <!-- PIPES: Con los pipes podemos especificar en que formato muestra la información que se interpola -->
-  {{ persona | json }}
+  <!-- {{ persona | json }}
   <br />
   {{ name.valid }}
   <br />
@@ -53,6 +116,5 @@
   <br />
   {{ name.pristine }}
   <br />
-  {{ name.errors | json }}
-
+  {{ name.errors | json }} -->
 </div>
