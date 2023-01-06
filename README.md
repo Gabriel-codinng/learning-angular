@@ -1465,3 +1465,126 @@ Consecuentemente, utilizaremos un selector para la directiva **RouterLink** que 
 ```
 
 El selector **routerLinkActive** permite agregar una clase en caso de que la ruta seleccionada sea la misma que la especificada.
+
+# Rutas hijas, parámetros y QueryParams
+
+Es una buena decisión integrar una ruta que redireccione al usuario a un página con el error 404 si la ruta dada no existe.
+
+Para ello, solo debemos agreagar una nueva ruta a la lista de rutas:
+
+``` 
+{path: '**', component: PagenotfoundComponent}
+```
+
+## QueryParams
+
+En algún momento necesitarás pasar **QueryParams** para poder obtener cierta información.
+
+Ejemplo:
+
+Deseo pasarle al formulario reactivo, el parametro "name" por la url, y que el componente recoja dicha información y la muestre.
+
+```
+export class NavbarComponent {
+  
+  constructor(private readonly router: Router) {}
+
+  goToReactive(): void{
+    this.router.navigate(['formulario-reactivo'], {queryParams: {name: 'Gabriel'}})
+  }
+}
+```
+
+Dentro del componente de navegación, crearemos una nueva propiedad de la clase y determinaremos que su tipo sera el de **"Router"**.
+
+Luego, en algún método, accederemos a esa propiedad y a su método **navigate**, el método nos permitirá pasarle la ruta como primer parámetro dentro de un array (ya que podríamos concatenar con otros elementos), y como segundo parámetro, podremos definir un objeto con la propiedad **queryParams**, al cual le asginaremos a su vez un objeto con la propiedad "name y un valor".
+
+```
+http://localhost:4200/formulario-reactivo?name=Gabriel
+```
+Para recoger el valor del parámetro, crearemos una nueva propiedad del objeto, inyectando **ActivatedRoute** como el tipo, para en el ciclo de vida de creación del componente, poder substraer la información de la ruta actuva actualmente.
+
+```
+constructor(private readonly fb: FormBuilder, private readonly route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+
+    // Un observable nos permite recopilar los cambios de su condición a lo largo del tiempo, a diferencia de las promesas pueden cambiar infinitas veces su valor.
+    this.route.queryParams.subscribe(
+      (params: Params) => {
+        this.name = params['name']
+      } 
+    )
+  }
+```
+**subscribe** es un observable que nos permite realizar un seguimiento de los cambios realizados a un valor.
+
+---
+## Parámetros
+
+Es posible que necesitemos pasar parámetros directamente en la ruta.
+
+Para ello debemos definir una ruta que defina el parámetro.
+
+```
+{path: 'query-id/:id', component: QueryIdComponent},
+```
+
+**:id** es un valor dinámico, id es solo un identificador, puede ser cualquier nombre.
+
+De la misma manera que accedemos a las queryParams, accedemos al parámetro definido en la ruta.
+
+```
+export class QueryIdComponent implements OnInit {
+  id!: string
+
+  constructor(private readonly route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.route.params.subscribe((params: Params) => {
+      this.id = params['id'];
+    })
+  }
+}
+```
+---
+## Rutas hija
+
+Para crear rutas hija, es tan sencillo como definir una ruta cualquiera, con una nueva propiedad **"childre"**.
+
+```
+{path: 'users', component:UserComponent, 
+  children:
+  [
+    {path:'list', component: ListComponent},
+    {path:'details', component: DetailsComponent}
+  ]
+},
+```
+
+Esto nos indicará que el acceso a los componentes, tiene que ser por la parte de "users".
+
+Por ejemplo
+
+```
+http://localhost:4200/users/details
+http://localhost:4200/users/list
+```
+
+Y para mostrar los resultados en HTML como ejemplo:
+
+```
+<div class="container">
+    <div class="row">
+        <div>
+            <a routerLink="list">Users list</a>
+        </div>
+        <div>
+            <a routerLink="details">Details</a>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>
+```
+
+En este caso, indicamos al componente que pinte el componente de la ruta hija seleccionada.

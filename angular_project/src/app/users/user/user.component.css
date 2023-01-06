@@ -1,0 +1,10 @@
+.container{
+    margin: 20px;
+    width: 100%;
+}
+
+.row{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+

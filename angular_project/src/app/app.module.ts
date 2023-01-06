@@ -26,6 +26,11 @@ import { FilterPipe } from './helper-pipes/filter.pipe';
 import { FormularioReactivoComponent } from './formulario-reactivo/formulario-reactivo.component';
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+import { QueryIdComponent } from './query-id/query-id.component';
+import { UserComponent } from './users/user/user.component';
+import { DetailsComponent } from './users/details/details.component';
+import { ListComponent } from './users/list/list.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +48,12 @@ import { NavbarComponent } from './navbar/navbar.component';
     FilterPipe,
     FormularioReactivoComponent,
     HomeComponent,
-    NavbarComponent
+    NavbarComponent,
+    PagenotfoundComponent,
+    QueryIdComponent,
+    UserComponent,
+    DetailsComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule,

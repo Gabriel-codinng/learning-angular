@@ -1,5 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 
 interface PersonaForm {
   "nombre": string,
@@ -14,12 +15,25 @@ interface PersonaForm {
   templateUrl: './formulario-reactivo.component.html',
   styleUrls: ['./formulario-reactivo.component.css']
 })
+
 export class FormularioReactivoComponent implements OnInit {
   persona!: FormGroup;
+  
+  //QueryParams
+  name!: string
 
-  constructor(private readonly fb: FormBuilder) { }
+  constructor(private readonly fb: FormBuilder, private readonly route: ActivatedRoute) { }
 
   ngOnInit(): void {
+
+    // Un observable nos permite recopilar los cambios de su condición a lo largo del tiempo, a diferencia de las promesas pueden cambiar infinitas veces su valor.
+    this.route.queryParams.subscribe(
+      (params: Params) => {
+        this.name = params['name']
+      } 
+    )
+
+
     this.persona = this.initForm();
     // this.onPathValue()
     // this.onSetValue()
@@ -28,7 +42,7 @@ export class FormularioReactivoComponent implements OnInit {
   onPathValue():void {
     // El método patchValue nos permite escoger determinadas propiedades y pasarles unos valores.
     this.persona.patchValue({
-      name: 'Hola'
+      name: this.name
     })
   }
 
