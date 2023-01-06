@@ -1,3 +1,4 @@
+import { AppRoutingModule } from './app.routing.module';
 /**
  * 
  *  Este archivo define un Módulo que agrupa las herramientas para definir los distintos componentes de la aplicación
@@ -23,6 +24,8 @@ import { FormOutputComponent } from './form-output/form-output.component';
 import { PipesComponent } from './pipes/pipes.component';
 import { FilterPipe } from './helper-pipes/filter.pipe';
 import { FormularioReactivoComponent } from './formulario-reactivo/formulario-reactivo.component';
+import { HomeComponent } from './home/home.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -38,12 +41,15 @@ import { FormularioReactivoComponent } from './formulario-reactivo/formulario-re
     FormOutputComponent,
     PipesComponent,
     FilterPipe,
-    FormularioReactivoComponent
+    FormularioReactivoComponent,
+    HomeComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

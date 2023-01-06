@@ -1336,3 +1336,132 @@ En caso contrario, realizará una búsqueda del elemento a partir del arugmento 
 Aplicamos el pipe como cualquier otro, en este caso, determinamos el nombre del pipe como "filter", a través de la variable "criteria" enlazada con un input.
 
 El resultado es un array filtrado.
+
+# Rutas
+
+Hay varias funciones que pueden cumplir las rutas, además de tener varias características:
+
+* Encargarse de la navegación entre componentes.
+
+* Pueden pasarse parámetros.
+
+* Redireccionar al cliente.
+
+* Se pueden proteger las rutas(guards).
+
+Los más conveniente para crear las rutas es utilizar un módulo a parte.
+
+Ejemplo:
+
+En un archivo llamado "app.routing.module.ts" definir las rutas.
+
+```
+import { HomeComponent } from './home/home.component';
+import { Formulario2Component } from './formulario2/formulario2.component';
+import { FormularioReactivoComponent } from './formulario-reactivo/formulario-reactivo.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+    {path: '', redirectTo: '/home', pathMatch: 'full'},
+    {path: 'formulario-reactivo', component: FormularioReactivoComponent},
+    {path: 'formulario-plantilla', component: Formulario2Component},
+    {path: 'home', component: HomeComponent},
+]
+
+@NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
+})
+
+export class AppRoutingModule {}
+```
+
+Exportamos una clase llamada: **"AppRoutingModule"** e importamos la directiva **@NgModule**, en el () definimos un objeto que tendrá dos propiedades:
+
+* **imports:** Dentro de un array, importamos el módulo **RouterModule**, gracias a la propiedad imports, podemos tener acceso a todas las caracteristas del módulo de rutas y a su vez, podemos exportarlas junto a nuestro módulo.
+
+   En este caso invocamos un método **forRoot()** del módulo de rutas, que permite crear y configurar un módulo con todos los proveedores de las rutas y sus directivas.
+   
+   Se define un array de objeto con todas las rutas, el tipo del array debe ser **Routes**.
+   
+   ```
+   const routes: Routes = [
+     {path: '', redirectTo: '/home', pathMatch: 'full'},
+     {path: 'formulario-reactivo', component: FormularioReactivoComponent},
+     {path: 'formulario-plantilla', component: Formulario2Component},
+     {path: 'home', component: HomeComponent},
+   ]
+   ```
+   
+   En las propiedades de los objetos, definimos unas propiedades concretas:
+      * path (string): Define la cadena de texto que será la ruta de acceso al componente.
+   
+      * component (class aunque define el tipo any o undefined): Define el componente al que hacemos referencia. 
+   
+      * resirectTo (string): En ciertas ocasiones (ejemplo: dejar la url en blanco) necesitaremos redirigir al usuario a algún componente, esa es la función de la propiedad.
+   
+      * pathMatch (string):  Busca coincidencias dadas en el path para ejecutar algo.
+   
+   Angular evalua las rutas dadas desde arriba hasta abajo, si alguna de las rutas dadas coincide con las rutas, finaliza la búsqueda.
+   
+* **exports:** Propiedad donde exportamos el módulo.
+
+Una vez definido el módulo, lo importamos en **app.module.ts**
+
+```
+@NgModule({
+  declarations: [
+    AppComponent,
+    ContadorComponent,
+    BotonesComponent,
+    FormularioComponent,
+    BuclesComponent,
+    SwitchComponent,
+    Formulario2Component,
+    DecoradorInputComponent,
+    DecoradorOutputComponent,
+    FormOutputComponent,
+    PipesComponent,
+    FilterPipe,
+    FormularioReactivoComponent,
+    HomeComponent,
+    NavbarComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+Para mostrar el componente dependiendo de la ruta seleccionada, utilizamos en la plantilla de app el selector:
+
+```
+<router-outlet></router-outlet>
+```
+
+Por como se definio previamente, el componente "home" muestra en su plantilla todos los componentes a través de sus selectores.
+
+Para poder definir un acceso a una ruta, dentro de la plantilla, utilizamos el tag: 
+```
+ <a></a>
+```
+
+Consecuentemente, utilizaremos un selector para la directiva **RouterLink** que convierte los clicks en navegación del enrutador.
+
+```
+<ul>
+    <!-- [routerLinkActiveOptions]="{exact: true}" -->
+    <li><a routerLinkActive="active" routerLink="/home">Home</a></li>
+    <li><a routerLinkActive="active" routerLink="/formulario-reactivo">Formulario Reactivo</a></li>
+    <li><a routerLinkActive="active" routerLink="/formulario-plantilla">Formulario Plantilla</a></li>
+</ul>
+```
+
+El selector **routerLinkActive** permite agregar una clase en caso de que la ruta seleccionada sea la misma que la especificada.

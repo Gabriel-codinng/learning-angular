@@ -1,0 +1,22 @@
+.nav{
+    margin: 10px;
+    background-color: white;
+    box-shadow: 2px 2px 5px 2px rgb(211, 211, 211);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+ul{
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+a{
+    color: black;
+}
+
+.active{
+    text-decoration: underline;
+    font-weight: 700;
+}
