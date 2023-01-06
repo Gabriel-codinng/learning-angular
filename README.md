@@ -682,6 +682,190 @@ Angular tiene dos enfoques para trabajar con formularios.
 
    Esencialmente separa la lógica de la vista.
 
+   Hay distintas directivas que se usan en los formularios reactivos:
+
+   * FormGroup (x).
+   * FormGroupName.
+   * FormControl.
+   * FormControlName (x).
+   * FormArrayName.
+
+   Para trabajar en los formularios reactivos debemos importar el módulo necesario en el app-module.
+
+   ```
+    import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+    import { DecoradorInputComponent } from './decorador-input/decorador-input.component';
+    import { DecoradorOutputComponent } from './decorador-output/decorador-output.component';
+    import { FormOutputComponent } from './form-output/form-output.component';
+    import { PipesComponent } from './pipes/pipes.component';
+    import { FilterPipe } from './helper-pipes/filter.pipe';
+    import { FormularioReactivoComponent } from './formulario-reactivo/formulario-reactivo.component';
+    
+    @NgModule({
+      declarations: [
+        AppComponent,
+        ContadorComponent,
+        BotonesComponent,
+        FormularioComponent,
+        BuclesComponent,
+        SwitchComponent,
+        Formulario2Component,
+        DecoradorInputComponent,
+        DecoradorOutputComponent,
+        FormOutputComponent,
+        PipesComponent,
+        FilterPipe,
+        FormularioReactivoComponent
+      ],
+      imports: [
+        BrowserModule,
+        FormsModule,
+        ReactiveFormsModule,
+      ],
+      providers: [],
+      bootstrap: [AppComponent]
+    })
+    export class AppModule { }
+   ```
+   
+   En el componente que aloje nuestro formulario reactivo, detallar una serie de directivas sobre el formulario.
+
+   En la etiqueta formulario se especifica la directiva **[formGroup]** y se le asocia algún identificador, mientras que en los campos se define la directiva **"formControlName"** y se le asocia un identificador 
+
+   ```
+    <form (ngSubmit)="onSubmit()" [formGroup]="persona" class="card">
+      <div class="input-container">
+       <label class="label" for="">Nombre:</label>
+       <!-- Es importante que si utilizamos la directiva ngModel, definamos la propiedad "name" en el input -->
+       <input
+         type="text"
+         name="nombre"
+         placeholder="Ingrese un nombre"
+         required
+         formControlName="name"
+       />
+      </div>
+ 
+      <div class="input-container">
+       <label class="label" for="">Edad:</label>
+       <input
+         type="text"
+         name="edad"
+         placeholder="Ingrese una edad"
+         required
+         formControlName="age"
+       />
+      </div>
+ 
+      <div class="input-container2">
+       <label class="label2" for="checkWork">
+         ¿Estas trabajando actualmente?
+       </label>
+       <div class="check">
+         <input
+         required
+         class="input-check"
+         type="checkbox"
+         name="checkWork"
+         required
+         formControlName="checkWork"
+       />
+       </div>
+      </div>
+ 
+      <div class="input-container">
+       <label class="label" for="ciudad">¿En que ciudad vives?</label>
+       <select
+         required
+         class="select"
+         name="ciudad"
+         id="ciudad"
+         formControlName="city"
+       >
+         <option value="NYC">NYC</option>
+         <option value="Madrid">Madrid</option>
+         <option value="Barcelona">Barcelona</option>
+       </select>
+      </div>
+ 
+      <div class="input-container">
+       <label class="label" for="textarea">Dejanos tu opinión</label>
+       <textarea
+         class="textarea"
+         name="opinion"
+         id="opinion"
+         cols="30"
+         rows="10"
+         formControlName="opinion"
+       ></textarea>
+      </div>
+ 
+     <button type="submit" [disabled]="persona.invalid">Enviar</button>
+    </form>
+   ```
+   Mientras que en la clase que define el componente, el archivo ts, agregamos lo siguiente:
+
+   ```
+    persona!: FormGroup;
+   ```
+
+   El identificador del formulario lo inicializamos y determinamos que su tipo es el **FormGroup**.
+
+   Luego, en el contructor de la clase, inicializamos una propiedad del tipo **FormBuildeR**
+
+   ```
+    constructor(private readonly fb: FormBuilder) { }
+   ```
+
+   En un método cualquiera, a través de la propiedad del tipo FormBuilder, contruimos con el método group, un objeto que define las propiedades (campos) del formulario, asignandoles un array, podemos definir en el primer elemento, su valor inicializador, y en el segundo, su validación o validaciones.
+
+   ```
+    initForm(): FormGroup { 
+    // Aquí declaramos las propiedades que tendrá el formulario con FormBuilder.
+    // Y sus distintas validaciones.
+      return this.fb.group({
+        name: ['', [Validators.required, Validators.minLength(3)]],
+        age: ['', [Validators.required]],
+        checkWork: ['', [Validators.required]],
+        city: ['', [Validators.required]],
+        opinion: ['', [Validators.maxLength(300)]]
+      })
+    }
+   ```
+
+   En el ciclo de vida que ejecuta los métodos requeridos para contruir un componente, utilizaremos el método que inicializa el formulario y así finalizariamos el formulario reactivo.
+
+   ```
+    ngOnInit(): void {
+     this.persona = this.initForm();
+    }
+   ``` 
+
+   Existen dos métodos relevantes para los formularios que deberían presenciarse.
+
+   ```
+    onPathValue():void {
+      // El método patchValue nos permite escoger determinadas propiedades y pasarles unos valores.
+      this.persona.patchValue({
+        name: 'Hola'
+      })
+    }
+
+    onSetValue():void {
+      // El método setValue nos permite settear todas las propiedades.
+      this.persona.setValue({
+        opinion: 'Hola mundo'
+      })
+    }
+   ```
+
+   Ambos métodos se utilizan para cargar las propiedades del formulario en el momento en el que se contruye el componente. Ambos métodos se ejecutan en el método **ngOnInit** para rellenar los formularios.
+
+   Un ejemplo podría ser la petición de una API para editar una información dada.
+
+   Los metodos de la propiedad que aloja el objeto del formulario son:
+    * PatchValue: Permite determinar que propiedades son inicializadas y cuales no.
+    * SetValue: Todas las propiedades del formulario bajo este método deben ser inicializados.
 # Validaciones ✔.
 
 Al agregar una variable de plantilla a los inputs, podemos acceder a todas sus características, siendo una de esta **"valid"**.
@@ -746,6 +930,49 @@ Accediendo a la propiedad "hidden", puede definir una condición para que manten
 En caso de que el input este vacío, y de que haya sido tocado, muestra el error.
 
 O si existe la validación y es correcta.
+
+--- 
+
+### Formularios reactivos y validaciones.
+
+Con los formularios reactivos comprobamos que al definir un formulario podemos asociarle una serie de validaciones.
+
+```
+  initForm(): FormGroup { 
+  // Aquí declaramos las propiedades que tendrá el formulario con FormBuilder.
+  // Y sus distintas validaciones.
+    return this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      age: ['', [Validators.required]],
+      checkWork: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      opinion: ['', [Validators.maxLength(300)]]
+    })
+  }
+```
+
+Para gestionar en las plantillas las validaciones se realiza de la siguiente manera.
+
+Ejemplo para el caso del campo "name":
+
+```
+<input
+  type="text"
+  name="nombre"
+  placeholder="Ingrese un nombre"
+  required
+  formControlName="name"
+/>
+
+<div *ngIf="persona.get('name')?.touched && persona.get('name')?.errors?.['required']" class="danger">
+  Este campo es requerido
+</div>
+
+<div *ngIf="persona.get('name')?.touched && persona.get('name')?.errors?.['minlength']" class="danger">
+  El nombre debe ser más largo que {{persona.get('name')?.errors?.['minlength'].requiredLength}} caracteres
+</div>
+```
+Se puede acceder a las clases dadas por Angular a traves de los métodos que nos proveen las directivas.
 
 # Ciclos de vida 🔄.
 

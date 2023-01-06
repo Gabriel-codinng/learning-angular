@@ -16,12 +16,13 @@ import { SwitchComponent } from './switch/switch.component';
 import { Formulario2Component } from './formulario2/formulario2.component';
 
 //Este módulo también deshabilita el envio de formularios.
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DecoradorInputComponent } from './decorador-input/decorador-input.component';
 import { DecoradorOutputComponent } from './decorador-output/decorador-output.component';
 import { FormOutputComponent } from './form-output/form-output.component';
 import { PipesComponent } from './pipes/pipes.component';
 import { FilterPipe } from './helper-pipes/filter.pipe';
+import { FormularioReactivoComponent } from './formulario-reactivo/formulario-reactivo.component';
 
 @NgModule({
   declarations: [
@@ -36,11 +37,13 @@ import { FilterPipe } from './helper-pipes/filter.pipe';
     DecoradorOutputComponent,
     FormOutputComponent,
     PipesComponent,
-    FilterPipe
+    FilterPipe,
+    FormularioReactivoComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

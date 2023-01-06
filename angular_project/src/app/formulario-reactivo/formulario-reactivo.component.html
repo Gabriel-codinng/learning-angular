@@ -1,12 +1,10 @@
 <div class="container">
-  <h1>Formulario basado en plantilla</h1>
-
-  <form
-    (ngSubmit)="onSubmit(contactForm)"
-    #contactForm="ngForm"
+    <h1>Formulario reactivo</h1>
+    <form
+    (ngSubmit)="onSubmit()"
+    [formGroup]="persona"
     class="card"
   >
-    <pre>{{ contactForm.value | json }}</pre>
     <div class="input-container">
       <label class="label" for="nombre">Nombre:</label>
       <!-- Es importante que si utilizamos la directiva ngModel, definamos la propiedad "name" en el input -->
@@ -14,18 +12,16 @@
         type="text"
         name="nombre"
         placeholder="Ingrese un nombre"
-        [(ngModel)]="persona.nombre"
         required
-        #name="ngModel"
+        formControlName="name"
       />
       <!-- Validación -->
-      <div
-        [hidden]="
-          name.valid || (name.pristine === true && name.untouched === true)
-        "
-        class="danger"
-      >
-        El nombre es obligatorio
+      <div *ngIf="persona.get('name')?.touched && persona.get('name')?.errors?.['required']" class="danger">
+        Este campo es requerido
+      </div>
+
+      <div *ngIf="persona.get('name')?.touched && persona.get('name')?.errors?.['minlength']" class="danger">
+        El nombre debe ser más largo que {{persona.get('name')?.errors?.['minlength'].requiredLength}} caracteres
       </div>
     </div>
 
@@ -35,18 +31,12 @@
         type="text"
         name="edad"
         placeholder="Ingrese una edad"
-        [(ngModel)]="persona.edad"
-        #age="ngModel"
         required
+        formControlName="age"
       />
       <!-- Validación -->
-      <div
-        [hidden]="
-          age.valid === true || (age.pristine === true && age.touched === false)
-        "
-        class="danger"
-      >
-        La edad es obligatoria
+      <div *ngIf="persona.get('age')?.touched && persona.get('age')?.errors?.['required']" class="danger">
+        Este campo es requerido
       </div>
     </div>
 
@@ -60,9 +50,12 @@
         class="input-check"
         type="checkbox"
         name="checkWork"
-        [(ngModel)]="persona.checkWork"
         required
+        formControlName="checkWork"
       />
+      </div>
+      <div *ngIf="persona.get('checkWork')?.touched && persona.get('checkWork')?.errors?.['required']" class="danger">
+        Este campo es requerido
       </div>
     </div>
 
@@ -73,22 +66,15 @@
         class="select"
         name="ciudad"
         id="ciudad"
-        [(ngModel)]="persona.ciudad"
-        #select="ngModel"
+        formControlName="city"
       >
         <option value="NYC">NYC</option>
         <option value="Madrid">Madrid</option>
         <option value="Barcelona">Barcelona</option>
       </select>
       <!-- Validación -->
-      <div
-        [hidden]="
-          select.valid === true ||
-          (select.pristine === true && select.touched === false)
-        "
-        class="danger"
-      >
-        La ciudad es obligatoria
+      <div *ngIf="persona.get('city')?.touched && persona.get('city')?.errors?.['required']" class="danger">
+        Este campo es requerido
       </div>
     </div>
 
@@ -100,21 +86,17 @@
         id="opinion"
         cols="30"
         rows="10"
-        [(ngModel)]="persona.opinion"
+        formControlName="opinion"
       ></textarea>
+      <div *ngIf="persona.get('opinion')?.touched && persona.get('opinion')?.errors?.['required']" class="danger">
+        Este campo es requerido
+      </div>
+
+      <div *ngIf="persona.get('opinion')?.touched && persona.get('opinion')?.errors?.['maxlength']" class="danger">
+        El máximo de caracteres permitidos es {{persona.get('opinion')?.errors?.['maxlength'].maxlength}}.
+      </div>
     </div>
 
-    <button type="submit" [disabled]="contactForm.invalid">Enviar</button>
+    <button type="submit" [disabled]="persona.invalid">Enviar</button>
   </form>
-
-  <!-- PIPES: Con los pipes podemos especificar en que formato muestra la información que se interpola -->
-  <!-- {{ persona | json }}
-  <br />
-  {{ name.valid }}
-  <br />
-  {{ name.touched }}
-  <br />
-  {{ name.pristine }}
-  <br />
-  {{ name.errors | json }} -->
 </div>
