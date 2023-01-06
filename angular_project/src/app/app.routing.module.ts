@@ -8,21 +8,24 @@ import { QueryIdComponent } from './query-id/query-id.component';
 import { UserComponent } from './users/user/user.component';
 import { ListComponent } from './users/list/list.component';
 import { DetailsComponent } from './users/details/details.component';
+import { PermissionsGuard } from './guards/permissions.guard';
+import { WithoutSaveGuard } from './guards/without-save.guard';
 
 const routes: Routes = [
-    {path: '', redirectTo: '/home', pathMatch: 'full'},
-    {path: 'formulario-reactivo', component: FormularioReactivoComponent},
-    {path: 'formulario-plantilla', component: Formulario2Component},
-    {path: 'query-id/:id', component: QueryIdComponent},
-    {path: 'home', component: HomeComponent},
-    {path: 'users', component:UserComponent, 
-     children:
-     [
-        {path:'list', component: ListComponent},
-        {path:'details', component: DetailsComponent}
-     ]
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: 'formulario-reactivo', component: FormularioReactivoComponent, canDeactivate: [WithoutSaveGuard] },
+    { path: 'formulario-plantilla', component: Formulario2Component },
+    { path: 'query-id/:id', component: QueryIdComponent },
+    { path: 'home', component: HomeComponent },
+    {
+        path: 'users', component: UserComponent, canActivate: [PermissionsGuard],
+        children:
+            [
+                { path: 'list', component: ListComponent },
+                { path: 'details', component: DetailsComponent }
+            ]
     },
-    {path: '**', component: PagenotfoundComponent}
+    { path: '**', component: PagenotfoundComponent }
 ]
 
 @NgModule({
@@ -30,4 +33,4 @@ const routes: Routes = [
     exports: [RouterModule],
 })
 
-export class AppRoutingModule {}
+export class AppRoutingModule { }
