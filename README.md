@@ -1669,3 +1669,35 @@ El siguiente código ejecuta un método que siempre retornará false, para prote
             ]
     },
 ```
+
+La propiedad dada en el objeto **canActivate** asignado a un array con los guards asociados al array, determina si un usuario tiene los requerimientos para poder cargar un componente.
+
+Otra interfaz sería la siguiente.
+
+```js
+export class WithoutSaveGuard implements CanDeactivate<unknown> {
+  canDeactivate(
+    component: unknown,
+    currentRoute: ActivatedRouteSnapshot,
+    currentState: RouterStateSnapshot,
+    nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    
+      if (this.hasUser()) {
+      return true;
+    }
+
+    return confirm('Tienes cambios sin guardar')
+
+  }
+
+  hasUser(): boolean {
+    return false
+  }
+}
+```
+
+```js
+{ path: 'formulario-reactivo', component: FormularioReactivoComponent, canDeactivate:[WithoutSaveGuard] }
+```
+
+El método **canDeactivate** determina si un usuario puede "desactivar" un componente.
