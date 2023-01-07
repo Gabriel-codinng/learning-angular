@@ -23,7 +23,7 @@ import { DecoradorOutputComponent } from './decorador-output/decorador-output.co
 import { FormOutputComponent } from './form-output/form-output.component';
 import { PipesComponent } from './pipes/pipes.component';
 import { FilterPipe } from './helper-pipes/filter.pipe';
-import { FormularioReactivoComponent } from './formulario-reactivo/formulario-reactivo.component';
+// import { FormularioReactivoComponent } from './formulario-reactivo/formulario-reactivo.component';
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
@@ -46,7 +46,7 @@ import { ListComponent } from './users/list/list.component';
     FormOutputComponent,
     PipesComponent,
     FilterPipe,
-    FormularioReactivoComponent,
+    // FormularioReactivoComponent,
     HomeComponent,
     NavbarComponent,
     PagenotfoundComponent,
@@ -58,7 +58,6 @@ import { ListComponent } from './users/list/list.component';
   imports: [
     BrowserModule,
     FormsModule,
-    ReactiveFormsModule,
     AppRoutingModule,
   ],
   providers: [],

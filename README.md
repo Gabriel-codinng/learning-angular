@@ -1825,3 +1825,92 @@ En el caso del HTML podemos realizar lo siguiente, y nos presentaría las opcion
 
 ---
 
+## Lazy loaging
+
+O **carga diferida**, el opbjetivo es retrasar la carga de un módulo concreto para mejorar el rendimiento de la aplicación, solo cargaremos el módulo o módulos cuando realmente lo necesitamos.
+
+La estretagía es modularizar independientemente los componentes para que carguen todos los recursos necesarios cuando se les invoque, y no hacerlo directamente en un módulo princioal, cargando módulos que a su vez no se usan.
+
+Para ello, necesitamos generar un **"featureModule"** y un módulo de rutas.
+
+Para ello crearemos los módulos correspondientes con el CLI de Angular a través del siguiente comando.
+
+```bash
+ng g m [nombre] --routing true
+```
+
+Esto nos creará dos módulos, uno para las rutas y otro para el **"featureModule"** que independizará del módulo principal.
+
+Esto generará dos archivos:
+
+- nombre-routing.module.ts (Routing).
+- nombre.module.ts (featureModule).
+
+El el módulo de routing especificaremos toda la información dada en el módulo principal sobre el componente.
+
+```js
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { FormularioReactivoComponent } from './formulario-reactivo.component';
+import { WithoutSaveGuard } from '../guards/without-save.guard';
+import { DataResolverService } from '../resolvers/data.resolver.service';
+
+const routes: Routes = [
+  {
+    //La ruta ya viene dada por el módulo de rutas principal.
+    path: '',
+    component: FormularioReactivoComponent,
+    canDeactivate: [WithoutSaveGuard],
+    resolve: { cities: DataResolverService }
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+
+export class FormularioReactivoRoutingModule { }
+```
+
+El módulo principal debemos especificar el módulo que debe cargar cuando el usuario accede a una determinada ruta.
+
+```js
+// Utilizamos la técnica de la importación dinámica
+    {path: 'formulario-reactivo', loadChildren: () => 
+      // A través de la promesa, obtenemos "m" que es el módulo
+      import('./formulario-reactivo/formulario-reactivo.module').then(m => m.FormularioReactivoModule)
+    },
+```
+
+El objeto **loadChildren** especifica las rutas secundarias con carga diferida, es por esa razón que solo se declara una ruta en uno de los dos sitios.
+
+En el módulo del componente:
+
+```js
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { FormularioReactivoRoutingModule } from './formulario-reactivo-routing.module';
+import { FormularioReactivoComponent } from './formulario-reactivo.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
+
+@NgModule({
+  declarations: [FormularioReactivoComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormularioReactivoRoutingModule
+  ]
+})
+
+export class FormularioReactivoModule { }
+```
+
+El el módulo del componente importamos en la declaración el módulo con el que trabajamos.
+
+Y en "imports" agregamos todos los módulos que necesita el componente, en este caso, al ser un formulario reactivo, necesita del "ReactiveFormsModule".
+
+En el módulo principal retiramos de la declaración el componente y en mi caso, también retirariamos en el "imports" el módulo para formularios reactivos.
+
