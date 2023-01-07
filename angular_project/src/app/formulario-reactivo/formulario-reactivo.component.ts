@@ -21,10 +21,18 @@ export class FormularioReactivoComponent implements OnInit {
   
   //QueryParams
   name!: string
+  
+  //Resolvers
+  cities: string[] = []
 
-  constructor(private readonly fb: FormBuilder, private readonly route: ActivatedRoute) { }
+  constructor(
+    private readonly fb: FormBuilder, 
+    private readonly route: ActivatedRoute) { }
 
   ngOnInit(): void {
+
+    //Resolvers
+    this.cities = this.route.snapshot.data['cities']
 
     // Un observable nos permite recopilar los cambios de su condición a lo largo del tiempo, a diferencia de las promesas pueden cambiar infinitas veces su valor.
     this.route.queryParams.subscribe(

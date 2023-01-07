@@ -68,9 +68,8 @@
         id="ciudad"
         formControlName="city"
       >
-        <option value="NYC">NYC</option>
-        <option value="Madrid">Madrid</option>
-        <option value="Barcelona">Barcelona</option>
+        <!-- Resolvers -->
+        <option *ngFor="let city of cities" [value]="city">{{city}}</option>
       </select>
       <!-- Validación -->
       <div *ngIf="persona.get('city')?.touched && persona.get('city')?.errors?.['required']" class="danger">

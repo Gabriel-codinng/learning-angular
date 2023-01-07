@@ -10,10 +10,16 @@ import { ListComponent } from './users/list/list.component';
 import { DetailsComponent } from './users/details/details.component';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { WithoutSaveGuard } from './guards/without-save.guard';
+import { DataResolverService } from './resolvers/data.resolver.service';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'formulario-reactivo', component: FormularioReactivoComponent, canDeactivate: [WithoutSaveGuard] },
+    {
+        path: 'formulario-reactivo',
+        component: FormularioReactivoComponent,
+        canDeactivate: [WithoutSaveGuard],
+        resolve: { cities: DataResolverService }
+    },
     { path: 'formulario-plantilla', component: Formulario2Component },
     { path: 'query-id/:id', component: QueryIdComponent },
     { path: 'home', component: HomeComponent },

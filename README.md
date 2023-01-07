@@ -1701,3 +1701,127 @@ export class WithoutSaveGuard implements CanDeactivate<unknown> {
 ```
 
 El método **canDeactivate** determina si un usuario puede "desactivar" un componente.
+
+Aclarar que existen más interfaces, en total serían estas:
+
+- CanActivateChild.
+- CanLoad.
+- Resolve.
+- CanDeactivate.
+- CanActive.
+
+---
+
+## Resolver
+
+Se define como una **"Interface"** que las clases pueden implementar para ser un proveedor de datos.
+
+Una especie de middleware que en el momento de navegar por la aplicación, se encargará de gestionar la renderización de los componentes solicitando la información que se necesita para su renderizado.
+
+Este se debe usar con el router para resolver datos durante la navegación.
+
+Se implmenta el método **resolve()** que se invoca a su vez cuando comienza la navegación.
+
+Y para que se active la ruta, el router espera a resolver (conseguir) los datos que necesita.
+
+---
+
+Para crear un resolver a través de la CLI, podemos utilizar el comando
+
+```bash
+ng generate resolver [name]
+```
+
+o
+
+```bash
+ng generate r [name]
+```
+
+---
+
+Ejemplo de uso:
+
+Queremos hacer una petición a una API para obtener todas las ciudades disponibles en la base de datos.
+
+Cuando tengamos esa información, cargaremos el componente (un formulario) con dicha información para que sea seleccionable por el usuario como una de las opciones disponibles.
+
+Primero exportamos una clase, segundo, importamos el decorador **"Injectable"**.
+
+### Inyeccción de dependecias(ID)
+
+Se trata de "inyectar" **servicios**(lógica que puede ser un valor, una función, objeto, etc..., típicamente es una clase de propósito limitado que sirve para abstraer la lógica del componente) en los componentes para que estos los consuman.
+
+Con @Injectable({ providedIn: 'root' }) estamos definiendo la siguiente clase como un servicio.
+
+```js
+// Decordador Injectable
+import { Injectable } from "@angular/core";
+import { Resolve } from "@angular/router";
+import { Observable, of } from "rxjs";
+
+const cities = ['NYC', 'Madrid', 'Barcelona', 'Sevilla']
+
+@Injectable({ providedIn: 'root' })
+
+// Interfaz Resolve
+export class DataResolverService implements Resolve<any>{
+    resolve(): Observable<any> {
+        //TODO: CALL SERVICE
+
+        // Convierte el dato del argumento y retorna un tipo observable.
+        return of(cities)
+    }
+}
+```
+
+Como no vamos a consumir una API, definimos un array con los valores.
+
+Implementamos la interfaz **"Resolve"** para identificar a la clase como un proveedor de datos. Este tipo de clases se pueden utilizar con el enrutador para resolver la información durante la navegación.
+
+La interfaz define un método **resolve()** que es invocado justo después de **ResolveStart""**, un evento del router.
+
+El router esperará por la información para resolverse antes de que la ruta se active.
+
+Dentro de la clase, definiremos un método que retornará un tipo "Observable" retornando el array transformado en un tipo "Observable".
+
+```js
+{
+  path: 'formulario-reactivo',
+  component: FormularioReactivoComponent,
+  canDeactivate: [WithoutSaveGuard],
+  resolve: { cities: DataResolverService }
+},
+```
+
+Dentro de la definición de la ruta, agregamos el parametro **resolve** y le asignamos un objeto con la propiedad, que a su vez se asignara al respñver creado.
+
+```js
+//Resolvers
+  cities: string[] = []
+
+  constructor(
+    private readonly fb: FormBuilder, 
+    private readonly route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+
+    //Resolvers
+    this.cities = this.route.snapshot.data['cities']
+  }
+```
+
+Es necesario, recoger la información antes de que se renderice el componente.
+
+La propiedad **snapshot** nos permite saber la información sobre la ruta asociada al componente cargado en un punto en concreto, utiliza la interfaz **"ActivatedRoute"** para ese cometido.
+
+Y la siguiente propiedad **data** nos provee un observable de los datos resultos y estáticos de la ruta.
+
+En el caso del HTML podemos realizar lo siguiente, y nos presentaría las opciones disponibles.
+
+```html
+<option *ngFor="let city of cities" [value]="city">{{city}}</option>
+```
+
+---
+
