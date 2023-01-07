@@ -1241,7 +1241,7 @@ En el componente padre que renderiza la lista, **definimos un evento con el nomb
 
 ---
 
-## Change Detection (Mecanismo de detección de cambio)
+## Change Detection (Mecanismo de detección de cambio) 💱
 
 Es el mecanismo o estrategia de detección de cambios que utiliza Angular para saber cuando debe actualizar un componente o toda la vista en caso de que la información haya cambiado.
 
@@ -1289,7 +1289,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 changeDetection: ChangeDetectionStrategy.OnPush
 ```
 
-## Pipes
+---
+
+## Pipes 🚇
 
 Los pipes reciben un dato y su objetivo es transformar ese dato.
 
@@ -1368,7 +1370,9 @@ Aplicamos el pipe como cualquier otro, en este caso, determinamos el nombre del 
 
 El resultado es un array filtrado.
 
-## Rutas
+---
+
+## Rutas 🛣
 
 Hay varias funciones que pueden cumplir las rutas, además de tener varias características:
 
@@ -1498,6 +1502,8 @@ Consecuentemente, utilizaremos un selector para la directiva **RouterLink** que 
 
 El selector **routerLinkActive** permite agregar una clase en caso de que la ruta seleccionada sea la misma que la especificada.
 
+---
+
 ## Rutas hijas, parámetros y QueryParams
 
 Es una buena decisión integrar una ruta que redireccione al usuario a un página con el error 404 si la ruta dada no existe.
@@ -1585,7 +1591,7 @@ export class QueryIdComponent implements OnInit {
 
 ---
 
-## Rutas hija
+## Rutas hija 👧
 
 Para crear rutas hija, es tan sencillo como definir una ruta cualquiera, con una nueva propiedad **"childre"**.
 
@@ -1626,7 +1632,9 @@ Y para mostrar los resultados en HTML como ejemplo:
 
 En este caso, indicamos al componente que pinte el componente de la ruta hija seleccionada.
 
-## Guards
+---
+
+## Guards 👮‍♂️
 
 Protegen las rutas, evitando que un usuario ingrese a estas, por ejemplo, sin tener los permisos apropiados o la autorización.
 
@@ -1712,7 +1720,7 @@ Aclarar que existen más interfaces, en total serían estas:
 
 ---
 
-## Resolver
+## Resolver 📩📮
 
 Se define como una **"Interface"** que las clases pueden implementar para ser un proveedor de datos.
 
@@ -1748,7 +1756,7 @@ Cuando tengamos esa información, cargaremos el componente (un formulario) con d
 
 Primero exportamos una clase, segundo, importamos el decorador **"Injectable"**.
 
-### Inyeccción de dependecias(ID)
+### Inyección de dependecias(ID) 💉
 
 Se trata de "inyectar" **servicios**(lógica que puede ser un valor, una función, objeto, etc..., típicamente es una clase de propósito limitado que sirve para abstraer la lógica del componente) en los componentes para que estos los consuman.
 
@@ -1825,7 +1833,7 @@ En el caso del HTML podemos realizar lo siguiente, y nos presentaría las opcion
 
 ---
 
-## Lazy loaging
+## Lazy loaging 🦥
 
 O **carga diferida**, el opbjetivo es retrasar la carga de un módulo concreto para mejorar el rendimiento de la aplicación, solo cargaremos el módulo o módulos cuando realmente lo necesitamos.
 
@@ -1914,3 +1922,11 @@ Y en "imports" agregamos todos los módulos que necesita el componente, en este 
 
 En el módulo principal retiramos de la declaración el componente y en mi caso, también retirariamos en el "imports" el módulo para formularios reactivos.
 
+---
+
+## forRoot & forChild 👨‍👦
+
+Son métodos estáticos proporcionados por Angular para poder por ejemplo, hacer una librería.
+
+- **forRoot**: Angular lo utiliza para poner todas las rutas en el módulo principal o raíz, todo lo que no sería considerado "lazy loading" se precisa de que cargue de manera inmediata.
+- **forChild**: Es el indicador de que un módulo debe cargarse bajo demanda (cuando se requiera), lo que omite que pertenezca a la carga inicial de módulos.
