@@ -3,11 +3,11 @@
     <p>Una lista de ciudades</p>
     <ul>
         <li>
-            <app-form-output (newCityEvent)="addNewCity($event)" ></app-form-output>
+            <app-form-output [selection]="selection" (updateCityEvent)="updateCity($event)" (newCityEvent)="addNewCity($event)" ></app-form-output>
         </li>
-        <li class="city" *ngFor="let city of cities">
-            {{city | titlecase}}
-            <!-- <p>Counter: {{counterRender()}}</p> -->
+        <li (click)="onSelectedCity(city)" class="city" [ngClass]="{'active': city?._id === selection?._id}" *ngFor="let city of cities">
+            <p>{{city.name | titlecase}}</p> <button (click)="onCityDelete(city._id)" *ngIf="city?._id === selection?._id" class="delete">Delete</button>
         </li>
+        <!-- {{cities | json}} -->
     </ul>
 </div>

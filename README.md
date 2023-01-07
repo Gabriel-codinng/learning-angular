@@ -1930,3 +1930,152 @@ Son métodos estáticos proporcionados por Angular para poder por ejemplo, hacer
 
 - **forRoot**: Angular lo utiliza para poner todas las rutas en el módulo principal o raíz, todo lo que no sería considerado "lazy loading" se precisa de que cargue de manera inmediata.
 - **forChild**: Es el indicador de que un módulo debe cargarse bajo demanda (cuando se requiera), lo que omite que pertenezca a la carga inicial de módulos.
+
+## HTTP Client de Angular
+
+Métodos propios de una solicitud a una API:
+
+- GET: Para la obtención de la información de la API.
+- POST: Para el ingreso de un nuevo dato en la API.
+- PUT: Para la actualización de un registro o varios registros.
+- DELETE: Para la eliminación de un registro o registros.
+
+En Angular para consumir una API y trabajar con la información dada, utilizamos los **"services"**, para crear un servicio con el CLI utilizamos el comando:
+
+```bash
+ng g s [nombre]
+```
+
+o
+
+```bash
+ng generate services [nombre]
+```
+
+Un servicio es por lo general, una clase que abstrae de toda lógica al componente, a excepción de la lógica que va intrinseca a la vista.
+
+En este caso, puede abstraer a un componente de definir los métodos para realizar a una API.
+
+```js
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+export interface Item {
+  _id:string;
+  name:string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+
+export class DataService {
+  private readonly API = 'https://crudcrud.com/api/0d7bad28f5304503b4cfc4a865054479/cities'
+
+  constructor(private readonly http: HttpClient) { }
+
+  // POST
+  addNewCity(item: string): Observable<City>{
+    const body = {name: item}
+    return this.http.post<Item>(this.API, body)
+  }
+
+  //GET
+  getCities(): Observable<Item[]>{
+    return this.http.get<Item[]>(this.API)
+  }
+
+  //PUT
+  updateCity(item: Item):Observable<void>{
+    const body = {name: city.name}
+    return this.http.put<void>(`${this.API}/${city._id}`, body)
+  }
+
+  //DELETE
+  deleteCity(id: string):Observable<void>{
+    return this.http.delete<void>(`${this.API}/${id}`)
+  }
+}
+```
+
+**"HttpClient"** es una clase inyectable, con métodos para realizar solicitudes HTTP. Cada método de solicitud tiene varias firmas y tipos de devolución (mayormente "observe" [observadores])
+
+El constructor definimos una propiedad que se le asigene el tipo **"HttpClient"**.
+
+En un serie de métodos, accedemos a partir de la propiedad asignada a la clase **HttpClient** a los distintos tipos de solicitudes.
+
+Para hacer funcional la clase **"Httpclient"** necesitarás de importar en el módulo donde lo apliques, el módulo **HttpClientModule**.
+
+```js
+import { HttpClientModule} from '@angular/common/http'
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    ContadorComponent,
+    BotonesComponent,
+    FormularioComponent,
+    BuclesComponent,
+    SwitchComponent,
+    Formulario2Component,
+    DecoradorInputComponent,
+    DecoradorOutputComponent,
+    FormOutputComponent,
+    PipesComponent,
+    FilterPipe,
+    // FormularioReactivoComponent,
+    HomeComponent,
+    NavbarComponent,
+    PagenotfoundComponent,
+    QueryIdComponent,
+    UserComponent,
+    DetailsComponent,
+    ListComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    AppRoutingModule,
+    HttpClientModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+En el contructor de la clase del componente, debemos hacer la inyección del "service".
+
+```js
+import { Component, OnInit } from '@angular/core';
+import { City, DataService } from '../services/data.service';
+
+@Component({
+  selector: 'app-decorador-output',
+  templateUrl: './decorador-output.component.html',
+  styleUrls: ['./decorador-output.component.css'],
+})
+export class DecoradorOutputComponent implements OnInit {
+  cities: City[] = []
+  selection!: City
+
+  // Inyección del service
+  constructor(private readonly dataSVc: DataService) { }
+
+  ngOnInit(): void {
+    this.dataSVc.getCities().subscribe(cities => {
+      this.cities = [...cities]
+      console.log(this.cities)
+    })
+  }
+}
+```
+
+Luego podremos acceder a las propiedades y a los métodos del "service".
+
+El método "subscribe" es para resolver el tipo "observe".
+
+Esa es la base para consumir una API en Angular, lo demás es agregar lógica según como desees mostrar la información.
+
+---

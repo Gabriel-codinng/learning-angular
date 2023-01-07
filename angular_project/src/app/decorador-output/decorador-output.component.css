@@ -10,8 +10,35 @@ ul{
 }
 
 .city{
-    margin-top: 20px;
+    margin-top: 10px;
     background: rgb(218, 216, 216);
-    padding: 10px;
+    padding: 2px;
     border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.city,p{
+    margin-left: 10px;
+}
+
+.delete{
+    border-radius: 10px;
+    background-color: rgb(219, 0, 0);
+    color: white;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-right: 10px;
+    border: none;
+}
+
+.delete:hover{
+    background-color: rgb(160, 0, 0);
+}
+
+.active{
+    background-color: rgb(49, 49, 255);
+    color: white;
 }
