@@ -2177,14 +2177,16 @@ export class SpinnerInterceptor implements HttpInterceptor {
 
 ---
 
-## **Observables.**
+## **Observables.** 👁
 
 ---
+
 ### ***Programación Reactiva***
 
 La programación Reactiva es la **programación orientada  al manejo de stremas de datos asíncronos y la propagación de los cambios.**
 
 ---
+
 ### ***RxJS***
 
 Se trata de **una libreria para componer programas asíncronos y basados en eventos usando secuencias observables.**
@@ -2210,7 +2212,7 @@ Los más usados son los **Observables y los operadores(operators)**, nos permite
   - **Observadores**
   - **Suscripciones**
 
-- ***Subject***: Es como in observable, pero a su vez **puede compartir información con varios observadores u observers** 
+- ***Subject***: Es como in observable, pero a su vez **puede compartir información con varios observadores u observers**
 
   - **Subject**
   - **Behavior Subject**
@@ -2273,4 +2275,50 @@ export class SpinnerService {
     this.isLoading$.next(false);
   }
 }
+```
+
+---
+
+## Content Project
+
+Es un patrón que nos ayuda a insertar o proyectar contenido en otros componentes.
+
+Ejemplo:
+
+Un componente "Card" que se repite pero varia su contenido.
+
+Las implementaciones del "content projection" en Angular, incluyen:
+
+- Single-slot: De esta manera, el componente acepta el contenido solo de un origen o fuente
+- Multi-slot: En este caso, acepta varios origenes o fuentes.
+- Conditional: Este utiliza el contenido de manera condicional.
+
+Ejemplo:
+
+Creamos un componente card:
+
+```html
+<div class="card">
+    <div class="header">
+        <ng-content select="[card-header]"></ng-content>
+    </div>
+    <div class="body">
+        <ng-content select="[card-body]"></ng-content>
+    </div> 
+</div>
+```
+
+La etiqueta ```html <ng-content select="[identificación]"></ng-content``` a través de atributos podemos identificar el contenedor donde irá el contenido.
+
+En el componente padre donde se aloja el componente "card", identificamos el selector y lo definimos con el elemento html que deseamos.
+
+```html
+<app-card>
+  <h2 card-header>
+    Soy Header
+  </h2>
+  <p card-body>
+    Body
+  </p>
+</app-card>
 ```
