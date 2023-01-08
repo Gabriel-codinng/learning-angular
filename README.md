@@ -2079,3 +2079,98 @@ El método "subscribe" es para resolver el tipo "observe".
 Esa es la base para consumir una API en Angular, lo demás es agregar lógica según como desees mostrar la información.
 
 ---
+
+## HTTP Interceptor 🛡
+
+El objetivo es interceptar una petición HTTP y modificarla.
+
+Ejemplo:
+
+Probablemente, para hacerle una petición a la API, necesitarás de colocarle unos parámetros en las peticiones HTTP.
+
+Para no tener que ponerle a cada petición unos parámetros, puedes utilizar un interceptor que coloque esos parametros por ti.
+
+Para generar un interceptor por el CLI, utilizamos el comando:
+
+```bash
+ng g interceptor [nombre]
+```
+
+Esto generará un archivo que contiene lo siguiente.
+
+```js
+import { Injectable } from '@angular/core';
+import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor
+} from '@angular/common/http';
+import { Observable, finalize } from 'rxjs';
+
+@Injectable()
+
+export class SpinnerInterceptor implements HttpInterceptor {
+
+  constructor() {}
+
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    return next.handle(request)
+  }
+}
+```
+
+En mi caso particular, quiero cargar un componente con un spinner hasta que cargue la información de la API, envie las solicitudes y reciba respuestas.
+
+En un "SpinnerService" tengo todos los métodos necesarios. Desde el interceptor solo le indico a través de métodos, cuando la propiedad de visibilidad es true o false.
+
+```js
+import { Injectable } from '@angular/core';
+import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor
+} from '@angular/common/http';
+import { Observable, finalize } from 'rxjs';
+import { SpinnerService } from './spinner.service';
+
+@Injectable()
+// Implementa la interfaz HttpInterceptor
+export class SpinnerInterceptor implements HttpInterceptor {
+
+  //Inyectamos el service del spinner
+  constructor(private readonly spinnerSvc: SpinnerService) {}
+
+  /* 
+    HttInterceptor identifica y maneja una solicitud HTTP determinada.
+    @param req: es el objeto de solicitud saliente a manejar (nuestros get, post, etc..., hacía el servidor)
+    @param next: identifica el próximo interceptor en la cadena, o el backend.
+
+    Si no hay interceptores @return genera un observable del flujo de eventos y finaliza el proceso.
+
+    handle() es un método de la clase HttHandler que recibe la request y devuelve el observable del tipo HttpEvent 
+    que a su vez es del tipo "any".
+  */
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    this.spinnerSvc.show()
+
+    /*
+      pipe permite agregar operadores (en este caso la función finalize()) al flujo de procesamiento del stream.
+
+      Si pusieramos más operadores, se irían procesando uno tras otro, el resultado del observable pasaría al primero opreador,
+      el resultado del primero saltaría al segundo, etc..
+
+      El resultado final se retorna a los suscriptores (por lo tanto, estamos devolviendo un observable)
+    */
+
+    /*
+      finalize() es un método que se invoca cuando finaliza la fuente, la función devuelve un observable que refleja la fuente, 
+      a su vez llamará a un callback al terminar.
+    */
+    return next.handle(request).pipe(
+      finalize(() => this.spinnerSvc.hide())
+    );
+  }
+}
+```

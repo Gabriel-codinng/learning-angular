@@ -31,7 +31,9 @@ import { QueryIdComponent } from './query-id/query-id.component';
 import { UserComponent } from './users/user/user.component';
 import { DetailsComponent } from './users/details/details.component';
 import { ListComponent } from './users/list/list.component';
-import { HttpClientModule} from '@angular/common/http'
+import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { SpinnerComponent } from './shared/spinner/spinner.component'
+import { SpinnerInterceptor } from './shared/spinner/spinner.interceptor';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,8 @@ import { HttpClientModule} from '@angular/common/http'
     QueryIdComponent,
     UserComponent,
     DetailsComponent,
-    ListComponent
+    ListComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +65,10 @@ import { HttpClientModule} from '@angular/common/http'
     AppRoutingModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    // Multi indica que se puede utilizar más de un interceptor.
+    {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
