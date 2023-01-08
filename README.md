@@ -2174,3 +2174,103 @@ export class SpinnerInterceptor implements HttpInterceptor {
   }
 }
 ```
+
+---
+
+## **Observables.**
+
+---
+### ***Programación Reactiva***
+
+La programación Reactiva es la **programación orientada  al manejo de stremas de datos asíncronos y la propagación de los cambios.**
+
+---
+### ***RxJS***
+
+Se trata de **una libreria para componer programas asíncronos y basados en eventos usando secuencias observables.**
+
+Esto nos permite hacer programación reactiva. Esta libreria no es especifica de Angular.
+
+Observables, Operators, Subscription, Subjects, son algunos de las características de la liberia.
+
+Los más usados son los **Observables y los operadores(operators)**, nos permiten el manejo de eventos asíncronos.
+
+- ***Observable***: es un **"stream" de datos**, estos streams **pueden ser colecciones o secuencias de eventos continuos ordenados en el tiempo.**
+  - **Stream**:
+   Pueden ser:
+    - Eventos de la UI.
+    - HTTP Request.
+    - Web Sockets.
+    - Estado de una App.
+
+   Representa una relación 1 -> ♾.
+
+   Esto se basa en el **patrón observer**:
+  - **Observable**
+  - **Observadores**
+  - **Suscripciones**
+
+- ***Subject***: Es como in observable, pero a su vez **puede compartir información con varios observadores u observers** 
+
+  - **Subject**
+  - **Behavior Subject**
+  - **Replay Subject**
+  - **Async Subject**
+
+---
+
+### Observable VS Promise
+
+- **Promise**:
+  1. Se ejecuta inmediatamente.
+  2. Emite un solo valor.
+  3. Envía los errores a las promesas hijas.
+
+- **Observable**:
+  1. No comienza hasta la suscripción.
+  2. Múltiples valores a lo largo del tiempo.
+  3. Observable proporciona operadores.
+
+***Ejemplos de Observables en la aplicación:***
+
+(data.service.ts)
+
+```js
+  addNewCity(city: string): Observable<City>{
+    const body = {name: city}
+    // Este observable viene dado por el módulo http (HttpClient) a través del método POST (que devuelve el observable)
+    return this.http.post<City>(this.API, body)
+  }
+```
+
+ADVERTENCIA: Este tipo de observables no hace falta desuscribirse, estos se completan de manera automática (y no causa memory leaks).
+
+```js
+addNewCity(city: string): void {
+  this.dataSVc.addNewCity(city).subscribe( res => {
+    this.cities.push(res)
+  })
+}
+```
+
+Hasta que no se realice el método **subscribe()**, el observable no empieza a realizar el costo computacional, simplemente existe y esta ahí.
+
+Cuando se realiza la suscripción empezamos a consumir ese observable.
+
+***Ejemplos de Subject:***
+
+```js
+export class SpinnerService {
+  // El signo de "$" indica que es un observable, es una convención.
+  // Declaramos una propiedad del tipo Subject que en este caso, es como un observable normal
+  isLoading$ = new Subject<boolean>(); 
+
+  show():void {
+    this.isLoading$.next(true);
+  }
+
+  hide():void {
+    this.isLoading$.next(false);
+  }
+}
+```
