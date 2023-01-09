@@ -5,9 +5,17 @@
         <li>
             <app-form-output [selection]="selection" (updateCityEvent)="updateCity($event)" (newCityEvent)="addNewCity($event)" ></app-form-output>
         </li>
-        <li (click)="onSelectedCity(city)" class="city" [ngClass]="{'active': city?._id === selection?._id}" *ngFor="let city of cities">
-            <p>{{city.name | titlecase}}</p> <button (click)="onCityDelete(city._id)" *ngIf="city?._id === selection?._id" class="delete">Delete</button>
-        </li>
+        <ng-container *ngIf="cities.length > 0; else templateEmpty">
+            <li (click)="onSelectedCity(city)" class="city" [ngClass]="{'active': city?._id === selection._id}" *ngFor="let city of cities">
+                <p>{{city.name | titlecase}}</p> <button (click)="onCityDelete(city._id)" *ngIf="city?._id === selection?._id" class="delete">Delete</button>
+            </li>
+        </ng-container>
         <!-- {{cities | json}} -->
+
+        <ng-template #templateEmpty>
+            <div style="margin-top:20px">
+                No hay ciudades en la lista.
+            </div>
+        </ng-template>
     </ul>
 </div>

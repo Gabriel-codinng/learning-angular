@@ -12,7 +12,7 @@ export interface City {
 })
 
 export class DataService {
-  private readonly API = 'https://crudcrud.com/api/432d4b95658b4c038d0e06f5d697cd07/cities'
+  private readonly API = 'https://crudcrud.com/api/bb3a079e538f408899d21dbe7f75af3e/cities'
 
   constructor(private readonly http: HttpClient) { }
 

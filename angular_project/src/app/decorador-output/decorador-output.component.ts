@@ -9,7 +9,7 @@ import { City, DataService } from '../services/data.service';
 })
 export class DecoradorOutputComponent implements OnInit {
   cities: City[] = []
-  selection!: City
+  selection: City = {_id:"", name:""}
 
   // Inyección del service
   constructor(private readonly dataSVc: DataService) { }

@@ -2322,3 +2322,38 @@ En el componente padre donde se aloja el componente "card", identificamos el sel
   </p>
 </app-card>
 ```
+
+---
+
+## NG-CONTAINER & NG-TEMPLATE 🏗
+
+- NG-CONTAINER: Un elemento qe nos permite tener directivas estructurales sin añadir ningún elemento al DOM.
+
+Ejemplo:
+
+```html
+<ng-container *ngIf="cities.length > 0; else templateEmpty">
+    <li (click)="onSelectedCity(city)" class="city" [ngClass]="{'active': city?._id === selection._id}" *ngFor="let city of cities">
+        <p>{{city.name | titlecase}}</p> <button (click)="onCityDelete(city._id)" *ngIf="city?._id === selection?._id" class="delete">Delete</button>
+    </li>
+</ng-container>
+```
+
+Esto no indica que si la longitud del array NO es superior a 0, no renderiza el tag "li" en el DOM.
+
+- NG-TEMPLATE: DEfine un plantilla que no se renderiza por defecto, si no que nosotros definimos el cuando.
+
+Ejemplo:
+
+En el ejemplo del ng-container, hemos señalado como alternativa de no cumplir la condición, añadir el elemento "templateEmpty"
+
+```html
+<ng-template #templateEmpty>
+    <div style="margin-top:20px">
+        No hay ciudades en la lista.
+    </div>
+</ng-template>
+```
+
+Hasta que no se le indique, Angular no renderizara el elemento "div" en el DOM.
+
