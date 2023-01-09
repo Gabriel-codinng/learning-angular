@@ -1,6 +1,7 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import { DataService } from '../services/data.service';
 
 interface PersonaForm {
   "nombre": string,
@@ -25,9 +26,14 @@ export class FormularioReactivoComponent implements OnInit {
   //Resolvers
   cities: string[] = []
 
+  selectedCity$ = this.dataSvc.selectedCity$;
+
   constructor(
     private readonly fb: FormBuilder, 
-    private readonly route: ActivatedRoute) { }
+    private readonly route: ActivatedRoute,
+    //Inyectamos el service
+    private readonly dataSvc: DataService
+    ) { }
 
   ngOnInit(): void {
 

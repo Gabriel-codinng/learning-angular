@@ -5,7 +5,7 @@ import { City } from '../services/data.service';
   selector: 'app-form-output',
   templateUrl: './form-output.component.html',
   styleUrls: ['./form-output.component.css'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class FormOutputComponent implements AfterViewInit{

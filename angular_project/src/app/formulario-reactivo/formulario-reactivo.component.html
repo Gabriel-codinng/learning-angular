@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>Formulario reactivo</h1>
+    <h1>Formulario reactivo {{name}} {{(selectedCity$ | async)?.name}}</h1>
     <form
     (ngSubmit)="onSubmit()"
     [formGroup]="persona"

@@ -1395,7 +1395,7 @@ export class NavbarComponent {
 }
 ```
 
-Dentro del componente de navegación, crearemos una nueva propiedad de la clase y determinaremos que su tipo sera el de **"Router"**.
+Dentro del componente de navegación, crearemos una nueva propiedad de la clase y determinaremos que su tipo sera el de **"Router"** (estamos inyectando el router).
 
 Luego, en algún método, accederemos a esa propiedad y a su método **navigate**, el método nos permitirá pasarle la ruta como primer parámetro dentro de un array (ya que podríamos concatenar con otros elementos), y como segundo parámetro, podremos definir un objeto con la propiedad **queryParams**, al cual le asginaremos a su vez un objeto con la propiedad "name y un valor".
 
@@ -1802,6 +1802,8 @@ Métodos propios de una solicitud a una API:
 - PUT: Para la actualización de un registro o varios registros.
 - DELETE: Para la eliminación de un registro o registros.
 
+### Service
+
 En Angular para consumir una API y trabajar con la información dada, utilizamos los **"services"**, para crear un servicio con el CLI utilizamos el comando:
 
 ```bash
@@ -1816,7 +1818,7 @@ ng generate services [nombre]
 
 Un servicio es por lo general, una clase que abstrae de toda lógica al componente, a excepción de la lógica que va intrinseca a la vista.
 
-En este caso, puede abstraer a un componente de definir los métodos para realizar a una API.
+En este caso, puede abstraer a un componente de definir los métodos para realizar peticiones a la API.
 
 ```js
 import { HttpClient } from '@angular/common/http';
@@ -1861,9 +1863,11 @@ export class DataService {
 }
 ```
 
-**"HttpClient"** es una clase inyectable, con métodos para realizar solicitudes HTTP. Cada método de solicitud tiene varias firmas y tipos de devolución (mayormente "observe" [observadores])
+@Injectable, es una clase anotada como decorador (identificado por el "@"), esto nos indica que el service que estamos creando forma parte del sistema de inyección de dependencias **(Es inyectable)**.
 
-El constructor definimos una propiedad que se le asigene el tipo **"HttpClient"**.
+**"HttpClient"** es una clase inyectable, con métodos para realizar solicitudes HTTP. Cada método de solicitud tiene varias firmas y tipos de devolución (mayormente "observe" [observadores, observables])
+
+El constructor definimos una propiedad que se le asigene el tipo **"HttpClient"** (lo inyectamos).
 
 En un serie de métodos, accedemos a partir de la propiedad asignada a la clase **HttpClient** a los distintos tipos de solicitudes.
 
@@ -2332,3 +2336,136 @@ export class Formulario2Component {
 **ADVERTENCIA:** Para poder hacer referencia a un elemento del DOM, este debe propiamente existir, lo que quiere decir que durante el ciclo de vida _**OnInit**_ (La vista no se ha renderizado), el elemento al que hagamos referencia no existe, arrojando como resultado un "undefined".
 
 Es más correcto manejar los selectores durante el ciclo de vida _**AfterViewInit**_, ya que Angular en este ciclo, ya ha renderizado la vista y por lo tanto, el elemento existe.
+
+---
+
+## Comunicación entre componentes
+
+En este caso, se trata de comunicación entre siblings, o sea, que no tienen una relación padre e hijo.
+
+El siguiente artículo resume los [métodos de comunicación entre componentes](https://www.danywalls.com/how-to-share-data-between-components-in-angular).
+
+### ¿Qué es un Subject?
+
+Son un tipo de Observabel especial, que nos permite realizar diversas tareas, son como EventEmitters.
+
+No mantiene el último valor emitido, sino que obtiene el valor que actualmente recibe el observador.
+
+### ¿Qué es un BehaviorSubject?
+
+Emite el último valor a todas las nuevas suscripciones.
+
+- Requiere de un valor por defecto.
+- Devuelve el último valor, inmediatamente hay una suscripción.
+- Puedes recuperar el último valor emitido con el _getValue()_
+
+Ejemplo:
+
+Queremos que la ciudad seleccionada este disponible en el componente de formulario reactivo.
+
+En el data service que provee los métodos CRUD y que conecta con la API, definimos un objeto del tipo "City".
+
+```js
+const initCity: City = {
+  _id: '',
+  name: '',
+}
+
+```
+
+Luego de eso, creamos una propiedad privada "city$", a la que se le asignara una nueva instancia de la clase "BehaviorSubject", obligatoriamente necesita un argumento por defecto (initCity).
+
+```js
+@Injectable({
+  providedIn: 'root'
+})
+
+export class DataService {
+
+  // Una diferencia sustancial entre Subject y BehaviorSubject es que al Behavior siempre hay que pasarle un valor por defecto
+  private city$ = new BehaviorSubject<City>(initCity);
+
+  private readonly API = 'https://crudcrud.com/api/448bb1e1d3854d19ad65af3859deb4a9/cities'
+
+  constructor(private readonly http: HttpClient) { }
+
+  // Getter
+  get selectedCity$():Observable<City> {
+    return this.city$.asObservable()
+  }
+
+  setCity(city: City): void {
+    this.city$.next(city)
+  }
+}
+```
+
+El método getter devolverá públicamente la ciudad seleccionada.
+
+El método setter registrará una nueva ciudad, el método next() de la clase "BehaviorSubject" asignará un nuevo valor, a la propiedad con la que inicializamos el objeto.
+
+Luego de inyectar el servicio, suscribimos el observable "selectedCity$", y en la propiedad que utilizabamos para guardar la selección de la ciudad, le asignamos la ciudad que obtenemos de la suscripción.
+
+```js
+  ngOnInit(): void {
+    this.dataSvc.selectedCity$.subscribe((city:City) => this.selection = city)
+
+    this.dataSvc.getCities().subscribe(cities => {
+      this.cities = [...cities]
+      console.log(this.cities)
+    })
+  }
+```
+
+Para asignar la ciudad que seleccionemos al observable para su posterior uso, debemos utilizar el método setCity().
+
+```js
+onSelectedCity(city: City): void {
+  // this.selection = city;
+  this.dataSvc.setCity(city);
+}
+```
+
+Vamos al componente del formulario rectivo, e inyectamos el servicio en la clase del componente.
+
+Definimos una nueva propieadad llamada "selectedCity$" y le asignamos el observable.
+
+```js
+export class FormularioReactivoComponent implements OnInit {
+  persona!: FormGroup;
+  
+  //QueryParams
+  name!: string
+  
+  //Resolvers
+  cities: string[] = []
+
+  selectedCity$ = this.dataSvc.selectedCity$;
+
+  constructor(
+    private readonly fb: FormBuilder, 
+    private readonly route: ActivatedRoute,
+    //Inyectamos el service
+    private readonly dataSvc: DataService
+    ) { }
+}
+```
+
+De la siguiente manera, con el pipe async, podremos devolver a la vista, el objeto city, al poder ser null le agregamos el "?" y luego accedemos a su propiedad "name".
+
+```html
+{{(selectedCity$ | async)?.name}}
+```
+
+---
+
+## Angular 15 nuevas características
+
+---
+
+## Referencias, agradecimientos y recursos
+
+La siguiente documentación ha sido realizada tomando como base:
+
+- [Reto 28 días aprendiendo Angular (Dominicode)](https://www.youtube.com/watch?v=8Fwwhjt3jjE&list=PL_9MDdjVuFjFBed4Eor5qj1T0LLahl4z0)
+- [Curso Angular de Coders Free (Victor Arana)](https://www.youtube.com/watch?v=X0LVIKRwWBs&list=PLZ2ovOgdI-kWDh3jDh-GvgToRlVfwIUFw)
