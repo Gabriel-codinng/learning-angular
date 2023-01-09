@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 interface PersonaForm {
@@ -16,7 +16,7 @@ interface PersonaForm {
   styleUrls: ['./formulario2.component.css']
 })
 export class Formulario2Component {
-
+  @ViewChild('contactForm') contactForm!: NgForm
   persona: PersonaForm = {
     "nombre": '',
     "edad": '',
@@ -25,9 +25,8 @@ export class Formulario2Component {
     "opinion": '',  
   }
 
-  onSubmit(form: NgForm): void {
+  onSubmit(): void {
     // alert('Form values ' + JSON.stringify (values))
-    console.log(form)
-
+    console.log('Form values template-driven', this.contactForm.value)
   }
 }

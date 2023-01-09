@@ -1,41 +1,59 @@
-import { Component, Output, EventEmitter, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectionStrategy, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { City } from '../services/data.service';
 
 @Component({
   selector: 'app-form-output',
   templateUrl: './form-output.component.html',
   styleUrls: ['./form-output.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class FormOutputComponent {
+export class FormOutputComponent implements AfterViewInit{
 
   @Output() newCityEvent = new EventEmitter<string>();
-  @Output() citySelectedEvent = new EventEmitter<City>();
   @Output() updateCityEvent = new EventEmitter<City>();
   @Input() selection !: City
 
-  onAddnewCity(city: string): void{
-    console.log('Item ->', city)
-    this.newCityEvent.emit(city)
+  /* 
+    Referenciamos a la referencia del input
+
+    ElementRef es un la envoltura de un elemento nativo dentro de una Vista.
+  */
+
+  @ViewChild('newCity') newCity!: ElementRef;
+
+  // onAddnewCity(city: string): void{
+  //   console.log('Item ->', city)
+  //   this.newCityEvent.emit(city)
+  // }
+
+  ngAfterViewInit(): void {
+    this.newCity.nativeElement.value = this.selection.name
+    console.log('Input ->', this.newCity)
   }
 
-  onCitySelected(city: City): void {
-    this.citySelectedEvent.emit(city)
+  onAddnewCity(): void{
+    // nativeElemenetRef es una propiedad de la clase ElementRef
+    this.newCityEvent.emit(this.newCity.nativeElement.value)
+    this.onClear()
   }
 
-  onUpdateCity(item: City, change: string): void {
-
+  onUpdateCity(): void {
     const city: City = {
-      _id: item._id,
-      name: change
+      _id: this.selection._id,
+      name: this.newCity.nativeElement.value
     }
 
     this.updateCityEvent.emit(city)
+    this.onClear()
   }
 
   // counterRender(): boolean{
   //   console.log('Render Form')
   //   return true
   // }
+
+  private onClear(): void{
+    this.newCity.nativeElement.value =  ''
+  }
 }

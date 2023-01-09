@@ -1,8 +1,15 @@
 <form action="">
     <label for="newCity">Nombre de la Ciudad: </label>
     <input class="input" id="newCity" name="newCity" type="text" [ngModel]="selection.name" #newCity>
-    <button *ngIf="!selection?.name" class="submit" (click)="onAddnewCity(newCity.value); " type="button" >Añadir nueva ciudad</button>
-    <button *ngIf="selection?.name" class="submit" (click)="onUpdateCity(selection, newCity.value); " type="button" >Editar ciudad</button>
+    <!-- 
+        Anteriormente: (click)="onAddnewCity(newCity.value)";
+        ViewChild: (click)="onAddnewCity();"
+     -->
+    <button *ngIf="!selection?.name && selection !== undefined" class="submit" (click)="onAddnewCity();" type="button" >Añadir nueva ciudad</button>
+    <!-- 
+        Anteriormente: (click)="onUpdateCity(selection, newCity.value);";
+        ViewChild: (click)="onUpdateCity(selection);"
+     -->
+    <button *ngIf="selection?.name" class="submit" (click)="onUpdateCity();" type="button" >Editar ciudad</button>
     <!-- <p>Count: {{counterRender()}}</p> -->
-    {{selection.name}}
 </form>

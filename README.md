@@ -1,85 +1,43 @@
 # learning-angular
 
-First project to learn how to develop a frontend project with angular
+Un primer vistazo a Angular
 
-# <span style="text-decoration:underline;">Aprendiendo Angular</span>
+## Aprendiendo Angular
 
 ## Versiones
 
 <table>
   <tr>
-   <td>
-<ul>
-<li>
-    Angular CLI: 15.0.4
-</li>
-<li>
-    Node: 18.10.0
-</li>
-<li>
-    Package Manager: npm 8.12.1
-</li>
-</ul>
+    <td>
+      <ul>
+        <li>
+          Angular CLI: 15.0.4
+        </li>
+        <li>
+          Node: 18.10.0
+        </li>
+        <li>
+          Package Manager: npm 8.12.1
+        </li>
+      </ul>
    </td>
    <td style="display:flex; align-items:center">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png" width="100" alt="" title="image_tooltip">
     <img src="https://midu.dev/images/tags/node.png" width="90" alt="alt_text" title="image_tooltip">
     <img style="margin-left:10px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Npm-logo.svg/1200px-Npm-logo.svg.png" width="100" alt="alt_text" title="image_tooltip">
-
    </td>
   </tr>
 </table>
 
-<table>
-  <tr>
-   <td>Paquetes
-   </td>
-   <td>Versiones
-   </td>
-  </tr>
-  <tr>
-   <td>@angular-devkit/architect
-   </td>
-   <td>0.1500.4
-   </td>
-  </tr>
-  <tr>
-   <td>@angular-devkit/build-angular
-   </td>
-   <td>15.0.4
-   </td>
-  </tr>
-  <tr>
-   <td>@angular-devkit/core
-   </td>
-   <td>15.0.4
-   </td>
-  </tr>
-  <tr>
-   <td>@angular-devkit/schematics
-   </td>
-   <td>15.0.4
-   </td>
-  </tr>
-  <tr>
-   <td>@schematics/angular
-   </td>
-   <td>15.0.4
-   </td>
-  </tr>
-  <tr>
-   <td>rxjs
-   </td>
-   <td>7.5.7
-   </td>
-  </tr>
-  <tr>
-   <td>typescript
-   </td>
-   <td>4.8.4
-   </td>
-  </tr>
-</table>
+| Paquetes  | Versiones  |
+| --- | --- |
+| @angular-devkit/architect  | 0.1500.4  |
+| @angular-devkit/build-angular  | 15.0.4  |
+| @angular-devkit/core  | 15.0.4  |
+| @angular-devkit/schematics  | 15.0.4  |
+| @schematics/angular  | 15.0.4  |
+| rxjs  | 7.5.7  |
+| typescript  | 4.8.4  |
 
 ---
 
@@ -1007,112 +965,16 @@ Los ciclos de vida definen los distintos estados de un componente desde su creac
 
 Angular nos permite a través de ciertos métodos, acceder a estos ciclos de vida.
 
-<table>
-  <tr>
-    <td>
-        Interfaz
-    </td>
-    <td>
-        Método
-    </td>
-    <td>
-        Descripción
-    </td>
-  </tr>
-  <tr>
-    <td>
-        OnChanges
-    </td>
-    <td>
-        ngOnChanges
-    </td>
-    <td>
-        Es llamado cuando el valor de un enlace input o output cambía
-    </td>
-  </tr>
-  <tr>
-    <td>
-        OnInit
-    </td>
-    <td>
-        ngOnInit
-    </td>
-    <td>
-        Va justo después de ngOnChanges.
-        Suelen hacerse penticiones a una API.
-        Iniciar métodos que se requieren antes de cargar el componente.
-    </td>
-  </tr>
-  <tr>
-    <td>
-        DoCheck
-    </td>
-    <td>
-        ngDoCheck
-    </td>
-    <td>
-        Sirve para detectar los cambios personalizados.
-    </td>
-  </tr>
-  <tr>
-    <td>
-        AfterContentInit
-    </td>
-    <td>
-        ngAfterContentInit
-    </td>
-    <td>
-        Después de que el contenido del componente se ha inicializado.
-    </td>
-  </tr>
-  <tr>
-    <td>
-        AfterContentChecked
-    </td>
-    <td>
-        ngAfterContentChecked
-    </td>
-    <td>
-        Después de cada comprobación del contenido del componente.
-    </td>
-  </tr>
-  <tr>
-    <td>
-        AfterViewInit
-    </td>
-    <td>
-        ngAfterViewInit
-    </td>
-    <td>
-        Después de que las vistas del componente son inicializadas.
-
-        Este ciclo de vida se suele trabajar con el decorador ViewChild.
-    </td>
-
-  </tr>
-  <tr>
-    <td>
-        AfterViewChecked
-    </td>
-    <td>
-        ngAfterViewChecked
-    </td>
-    <td>
-        Después de comprobar las vistas del componente.
-    </td>
-  </tr>
-  <tr>
-    <td>
-        OnDestroy
-    </td>
-    <td>
-        ngOnDestroy
-    </td>
-    <td>
-        Se ejecuta justo antes de que la directiva sea destruida.
-    </td>
-  </tr>
-</table>
+|  Interfaz  |  Método  |  Descripción  |
+| --- | --- | --- |
+|  OnChanges  |  ngOnChanges  |  Es llamado cuando el valor de un enlace input o output cambía  |
+|  OnInit  |  ngOnInit  |  Va justo después de ngOnChanges. Suelen hacerse penticiones a una API. Iniciar métodos que se requieren antes de cargar el componente.  |
+|  DoCheck  |  ngDoCheck  |  Sirve para detectar los cambios personalizados.  |
+|  AfterContentInit  |  ngAfterContentInit  |  Después de que el contenido del componente se ha inicializado.  |
+|  AfterContentChecked  |  ngAfterContentChecked  |  Después de cada comprobación del contenido del componente.  |
+|  AfterViewInit  |  ngAfterViewInit  |  Después de que las vistas del componente son inicializadas. Este ciclo de vida se suele trabajar con el decorador ViewChild.  |
+|  AfterViewChecked  |  ngAfterViewChecked  |  Después de comprobar las vistas del componente.  |
+|  OnDestroy  |  ngOnDestroy  |  Se ejecuta justo antes de que la directiva sea destruida.  |
 
 Ejemplo:
 
@@ -2181,13 +2043,13 @@ export class SpinnerInterceptor implements HttpInterceptor {
 
 ---
 
-### ***Programación Reactiva***
+### **Programación Reactiva**
 
 La programación Reactiva es la **programación orientada  al manejo de stremas de datos asíncronos y la propagación de los cambios.**
 
 ---
 
-### ***RxJS***
+### ***RxJS**
 
 Se trata de **una libreria para componer programas asíncronos y basados en eventos usando secuencias observables.**
 
@@ -2197,7 +2059,7 @@ Observables, Operators, Subscription, Subjects, son algunos de las característi
 
 Los más usados son los **Observables y los operadores(operators)**, nos permiten el manejo de eventos asíncronos.
 
-- ***Observable***: es un **"stream" de datos**, estos streams **pueden ser colecciones o secuencias de eventos continuos ordenados en el tiempo.**
+- **Observable**: es un **"stream" de datos**, estos streams **pueden ser colecciones o secuencias de eventos continuos ordenados en el tiempo.**
   - **Stream**:
    Pueden ser:
     - Eventos de la UI.
@@ -2212,7 +2074,7 @@ Los más usados son los **Observables y los operadores(operators)**, nos permite
   - **Observadores**
   - **Suscripciones**
 
-- ***Subject***: Es como in observable, pero a su vez **puede compartir información con varios observadores u observers**
+- **Subject**: Es como in observable, pero a su vez **puede compartir información con varios observadores u observers**
 
   - **Subject**
   - **Behavior Subject**
@@ -2233,7 +2095,7 @@ Los más usados son los **Observables y los operadores(operators)**, nos permite
   2. Múltiples valores a lo largo del tiempo.
   3. Observable proporciona operadores.
 
-***Ejemplos de Observables en la aplicación:***
+**Ejemplos de Observables en la aplicación:**
 
 (data.service.ts)
 
@@ -2259,7 +2121,7 @@ Hasta que no se realice el método **subscribe()**, el observable no empieza a r
 
 Cuando se realiza la suscripción empezamos a consumir ese observable.
 
-***Ejemplos de Subject:***
+**Ejemplos de Subject:**
 
 ```js
 export class SpinnerService {
@@ -2308,7 +2170,7 @@ Creamos un componente card:
 </div>
 ```
 
-La etiqueta ```html <ng-content select="[identificación]"></ng-content``` a través de atributos podemos identificar el contenedor donde irá el contenido.
+La etiqueta ```html <ng-content select="[identificación]"></ng-content>``` a través de atributos podemos identificar el contenedor donde irá el contenido.
 
 En el componente padre donde se aloja el componente "card", identificamos el selector y lo definimos con el elemento html que deseamos.
 
@@ -2357,3 +2219,116 @@ En el ejemplo del ng-container, hemos señalado como alternativa de no cumplir l
 
 Hasta que no se le indique, Angular no renderizara el elemento "div" en el DOM.
 
+---
+
+## Decorador ViewChild Decorator
+
+Se trata de un decorador de propiedades, que configura una consulta de vista.
+
+El detectos buscará el primer elemento o directiva que coincida con el selector en el DOM.
+
+Consulta en el DOM un elemento (que nosotros determinemos), este selecionará el primero que detecte, algunos selectores admitidos:
+
+- **@Component**
+- **@Directive**
+- **Variables de plantilla**
+- **TemplateRef**
+- **NgModel**
+
+Ejemplo
+
+Con una directiva:
+
+```js
+@Directive({selector: 'child-directive'})
+class ChildDirective {}
+
+@Component({selector: 'myComponent', templateUrl: 'myComponent.html'})
+class MyComponent implements AfterViewInit{
+
+  /*
+    Usamos el decordador ViewChild, definimos el selector ChildDirective, y la renombramos como childDirective, 
+    tipandola del tipo del selector
+  */
+
+  @ViewChild(ChildDirective) childDirective!: ChildDirective;
+
+  ngAfterViewInit(): void {
+    // child is set
+  }
+}
+```
+
+Con un componente:
+
+```js
+@Component({
+  selector: "myComponent",
+  templateUrl: "myComponent.html"
+})
+
+class myComponent {}
+
+@ViewChild(MyComponent) myComponent: MyComponent;
+```
+
+Con variables de plantilla, con NgModel:
+
+```html
+<my-component #cmp></my-component>
+@ViewChild('cmp') myCmp!: ElementRef;
+
+<input type="text" #myInput>
+@ViewChild('myInput') myInput!: ElementRef;
+
+<input type="text" [(ngModel)]="filterInput">
+@ViewChild(NgModel) filterInput!: NgModel;
+
+<ng-template></ng-template>
+@ViewChild(TemplateRef) myTemplate!: TemplateRef<ElementRef>
+```
+
+Ejemplo práctico:
+
+En el formulario de plantilla, seleccionamos el elemento formulario que tenía asignada la variable de plantilla "contactForm", con el decorador y asignandole el tipo adecuado (NgForm por ser formulario de plantilla), podemos acceder a las propiedades del formulario.
+
+En el método onSubmit(), mostramos por consola los valores del formulario
+
+```js
+export class Formulario2Component {
+  @ViewChild('contactForm') contactForm!: NgForm
+  persona: PersonaForm = {
+    "nombre": '',
+    "edad": '',
+    "checkWork": false,
+    "ciudad": '',
+    "opinion": '',  
+  }
+
+  onSubmit(): void {
+    // alert('Form values ' + JSON.stringify (values))
+    console.log('Form values template-driven', this.contactForm.value)
+  }
+}
+```
+
+```html
+<!--
+    Anteriormente
+  -----------------------
+  (ngSubmit)="onSubmit(contactForm)"
+
+    Con ViewChild
+  -----------------------
+  (ngSubmit)="onSubmit()"
+  -->
+  <form
+    (ngSubmit)="onSubmit()"
+    #contactForm="ngForm"
+    class="card"
+  >
+```
+
+**ADVERTENCIA:** Para poder hacer referencia a un elemento del DOM, este debe propiamente existir, lo que quiere decir que durante el ciclo de vida _**OnInit**_ (La vista no se ha renderizado), el elemento al que hagamos referencia no existe, arrojando como resultado un "undefined".
+
+Es más correcto manejar los selectores durante el ciclo de vida _**AfterViewInit**_, ya que Angular en este ciclo, ya ha renderizado la vista y por lo tanto, el elemento existe.

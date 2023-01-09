@@ -1,8 +1,17 @@
 <div class="container">
-  <h1>Formulario basado en plantilla</h1>
+  <h1>Formulario basado en plantilla + ViewChild</h1>
 
+  <!--
+    Anteriormente
+  -----------------------
+  (ngSubmit)="onSubmit(contactForm)"
+
+    Con ViewChild
+  -----------------------
+  (ngSubmit)="onSubmit()"
+  -->
   <form
-    (ngSubmit)="onSubmit(contactForm)"
+    (ngSubmit)="onSubmit()"
     #contactForm="ngForm"
     class="card"
   >
