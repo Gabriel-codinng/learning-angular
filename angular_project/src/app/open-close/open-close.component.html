@@ -1,0 +1,8 @@
+<div>
+    <h1>Animaciones Angular</h1>
+    <button (click)="toggle()">Hola mundo</button>
+    <div [@openClose]="isOpen ? 'open' : 'closed' " class="open-close-container">
+        <p>La caja esta {{ isOpen ? 'Abierta' : 'Cerrada' }}!</p>
+    </div>
+</div>
+

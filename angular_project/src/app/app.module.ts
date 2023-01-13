@@ -35,7 +35,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { SpinnerComponent } from './shared/spinner/spinner.component'
 import { SpinnerInterceptor } from './shared/spinner/spinner.interceptor';
 import { CardComponent } from './card/card.component';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { OpenCloseComponent } from './open-close/open-close.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,10 +60,12 @@ import { CardComponent } from './card/card.component';
     DetailsComponent,
     ListComponent,
     SpinnerComponent,
-    CardComponent
+    CardComponent,
+    OpenCloseComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     AppRoutingModule,
     HttpClientModule,

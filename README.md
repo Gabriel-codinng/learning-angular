@@ -2459,7 +2459,285 @@ De la siguiente manera, con el pipe async, podremos devolver a la vista, el obje
 
 ---
 
+## Angular Animations 🎉🎊
+
+Angular se basa en la funcionalidad CSS para poder animar la página web, lo que significa que se podrá animar cualquier cosa que el navegador considere animable.
+
+Y para ello utiliza fundamentalmente dos módulos:
+
+- **@angular/animations**
+- **@angular/platform-browser**
+
+Y para poder trabajar con estos módulos, necesitamos importar en nuestro módulo principal, el ngModule **BrowserAnimationsModule**.
+
+```js
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule
+  ],
+  declarations: [ ],
+  bootstrap: [ ]
+})
+export class AppModule { }
+```
+
+Es posible que solo queramos algunas funciones de animación en cierto componente, para ello las importamos desde **@angular/animations**.
+
+```js
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+  // ...
+} from '@angular/animations';
+```
+
+En el archivo ts del componente, debemos agregar en el decorador **@Component** una propiedad llamada **animations:**, dentro defines los triggers que definiran las animaciones dentro de la propiedad.
+
+```js
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css'],
+  animations: [
+    // los triggers van aquí.
+  ]
+})
+```
+
+Ejemplo:
+
+```js
+import { trigger, state, style, animate, transition } from '@angular/animations';
+
+@Component({
+  selector: 'app-open-close',
+  templateUrl: './open-close.component.html',
+  styleUrls: ['./open-close.component.css'],
+  animations:[
+    trigger('openClose', [
+      state('open', style({
+        height: '200px',
+        opacity: 1,
+        backgroundColor: '#ffe65d'
+      })),
+      state('closed', style({
+        height: '100px',
+        opacity: 0.8,
+        backgroundColor: 'gray'
+      })),
+      transition('* => closed', [
+        animate('1s')
+      ]),
+      transition('* => open', [
+        animate('0.5s')
+      ]),
+    ]),
+  ]
+})
+
+export class OpenCloseComponent {
+  isOpen = true;
+
+  toggle() {
+    this.isOpen = !this.isOpen;
+  }
+}
+```
+
+El método **state()** define los distintos estados para llamar en cada transicion: open -> close, close -> open, el método **style()** define los estilos CSS de cada uno de los estados anteriores.
+
+Si queremos, podemos acentuar el cambio de estado durante un periodo de tiempo determinado:
+
+```js
+transition('* => closed', [
+  animate('1s')
+]),
+transition('* => open', [
+  animate('0.5s')
+]),
+```
+
+**transition()** es un método que define una transición, el primer parametro acepta una expresión que en nuestro caso, sirve para definir los distintos estados. El segundo parametro acepta uno o varios métodos **animate()**.
+
+**animate()** es una función que nos permite definir una duración, retraso o aceleración de una transición. Con este método podemos definir los **keyframes()** para animaciones con varios pasos y se colocan como segundo argumento del método animate().
+
+Ejemplos con los keyframes:
+
+```js
+animate("5s", keyframes([
+  style({ backgroundColor: "red", offset: 0 }),
+  style({ backgroundColor: "blue", offset: 0.2 }),
+  style({ backgroundColor: "orange", offset: 0.3 }),
+  style({ backgroundColor: "black", offset: 1 })
+]))
+```
+
+  1. 1º Parámetro;
+    Puede tomar un número o una cadena definida en tres partes:
+
+   ```js
+    animate(duración)
+   ```
+
+   o
+
+   ```js
+    animate('duration delay easing')
+   ```
+
+  la primera parte es obligatoria y se puede expresar en milisegundos como un número sin comillas o en segundos con comillas y un especificador de tiempo.
+
+  Ejemplos:
+    - 100
+    - '100ms'
+    - '0.1s'
+
+  El segundo argumento tiene la mismas base que el anterior
+    - '0.2s 100ms', Espere 100ms y luego ejecute durante 200ms.
+
+  El tercer argumento **easing** controla como se acelera y desacelera la animación durante un tiempo de ejecución. **ease-in** hace que la animación comience lentamente y aumente la velocidad a medida que avanza.
+
+- Espere 100 ms, ejecute durante 200 ms. Use una curva de desaceleración para comenzar rápido y desacelere lentamente hasta un punto de descanso: '0.2s 100ms ease-out'
+
+- Ejecutar durante 200 ms, sin demora. Use una curva estándar para comenzar lento, acelerar en el medio y luego desacelerar lentamente al final: '0.2s ease-in-out'
+
+- Comience inmediatamente, corra durante 200 ms. Use una curva de aceleración para comenzar lento y terminar a toda velocidad: '0.2s ease-in'
+
+Para activar la animación necesitamos un disparador, **trigger()** es una función que recopila estados y transiuciones, identificando la animación por un nombre, para poder asginarselo al elemento HTML.
+
+Esta misma función describe el nombre de la propiedad para observar los cambios. Cuando ocurre el cambio, el disparador acciona o ejecuta todas las funciones que hemos definido.
+
+En nuestro caso definimos lo siguiente:
+
+```js
+export class OpenCloseComponent {
+  isOpen = true;
+
+  toggle() {
+    this.isOpen = !this.isOpen;
+  }
+}
+```
+
+Un booleano que alterará el estado del elemento HTML.
+
+```html
+<div [@openClose]="isOpen ? 'open' : 'closed' " class="open-close-container">
+  <p>La caja esta {{ isOpen ? 'Abierta' : 'Cerrada' }}!</p>
+</div>
+```
+
+Vinculamos el disparador con una variable de plantilla, y cuando se desencadene un cambio en el valor "isOpen", se definira un nuevo estado para el elemento HTML.
+
+Cuando sucede el cambio de valor, el disparador **openClose** se activa y luego el disparador maneja el cambio según como este definido
+
+Para los elementos que ingresan o salen de una página (insertados o eliminados del DOM), puede hacer que las animaciones sean condicionales. Por ejemplo, utilícelo con el disparador de animación en la plantilla HTML.*ngIf
+
+---
+
 ## Angular 15 nuevas características
+
+- ### **Standalone components**
+
+  Antes:
+
+  ![Componente en Angular 14](img-content/Standalone_components(14-1).png)
+
+  ![Componente en Angular 14](img-content/Standalone_components(14-1).png)
+
+  ![Componente en Angular 15](img-content/Standalone_components(15).png)
+
+  Angular trabajaba con módulos, una agrupación de componentes, servicios y pipes.
+
+  **Problemas:**
+
+  - A la larga, los módulos podrían crear cierta dependencia o concurrencia ya que, es posible que en módulo, se necesite utilizar alguna cosa en una tarea concreta, pero como esta dentro del módulo, entonces todo el módulo debe ser importado. Esto daba problema de rendimientos sobre todo.
+
+    Eso a su vez va en contra del estandar actual, pues los otro frameworks de forma opcional te permiten modularizar o no (sobre todo para que puedas hacer aplicaciones pequeñas, Angular no permite eso).
+
+  Son componentes que no necesitan módulos, lo que nos permite trabajar con arquitecturas de software mantenibles y sostenibles, tenemos la capacidad de crear aplicaciones basadas en componentes pequeños, pero con el potencial de expandirlos con módulos.
+
+- ### **TypedForms**
+
+  Problema:
+
+  Si bien los formularios nos permiten guardar los valores de una muy buena manera, existe el problema de castearlos con tipos (null -> string ->objeto), Angular no lo trabajaba muy bien.
+
+  ![Formularios tipados](img-content/TypedForms.png)
+  
+  ![Formularios tipados](img-content/TypedForms2.png)
+
+  De esta manera, si el tipo asignado a la propiedad del objeto no es el que tenía el tipo original, typeScript se quejará.
+
+- ### **TitleStrategy**
+
+  Se basa en la capacidad de aumentar la accesibilidad de la aplicación.
+
+  Problema:
+
+  En las SPAs el título no cambia, de seguir explorando la aplicación, el título no cambiará, eso es un problema a la hora de identificar a un usuario en que lugar de la aplicación se encuentra.
+
+  De esta manera, Angular ofrece el TitleStrategy, para poder cambiar el título de manera dinámica, para identificar en que página se encuentra.
+
+  ![Formularios tipados](img-content/TitleStrategy.png)
+
+- ### **Standalone Router & HTTP**
+
+  Tanto Router como HTTP también estan capacitados para existir sin necesidad de crear módulos.
+
+  Para crear rutas:
+
+  ![Formularios tipados](img-content/RouteStandAloneCreate.png)
+
+  Agregar LazyLoading:
+
+  ![Formularios tipados](img-content/LazyLoadingStandAlone.png)
+
+  Si queremos un provider para que cargue todo:
+
+  ![Formularios tipados](img-content/ProvideStandAloneRoute.png)
+
+- ### **Directive Composition API**
+
+  La directiva es una forma en la que Angular nos permite modificar elementos del DOM y poder darle funcionalidad (NgIf, NgFor, etc...).
+
+  Ahora podemos realizar una unión de distintas directivas, combinar el comportamiento de directivas.
+
+  ![Formularios tipados](img-content/Directive_Composition_API.png)
+
+  En la imagen estariamos utilizando una directiva denominada **"mat-menu"**, con **"HasColor"**, utilizando a su vez la directiva del **"CdkMenu"** para los inputs, poniendole el menú disable, y para los outputs menú close.
+
+  Aquí realizamos la composición, se esta agreagando código para cambiar el comportamiento sin modificar el comportamiento del código existente.
+
+- ### **Image directive**
+
+  Angular ahora nos provee de una directiva para ponerlo a las imagenes para optimizar su carga.
+
+  Indirectamente proyectando un lazyloading para que se carguen solo cuando los requerimos.
+
+  ![Formularios tipados](img-content/Image_directive.png)
+
+- ### **Functional router guards**
+
+  Se agrega una nueva metodología, el **inject()**, nos permite prescindir el inyectar dependencias por medio de constructor.
+
+  ![Formularios tipados](img-content/Functional_router_guards.png)
+
+- ### **Better stack traces**
+
+  Los errores de angular eran muy verbosos
+
+  ![Formularios tipados](img-content/Better_stack_traces.png)
+
+  Ahora los errores son más legibles
 
 ---
 
@@ -2469,3 +2747,4 @@ La siguiente documentación ha sido realizada tomando como base:
 
 - [Reto 28 días aprendiendo Angular (Dominicode)](https://www.youtube.com/watch?v=8Fwwhjt3jjE&list=PL_9MDdjVuFjFBed4Eor5qj1T0LLahl4z0)
 - [Curso Angular de Coders Free (Victor Arana)](https://www.youtube.com/watch?v=X0LVIKRwWBs&list=PLZ2ovOgdI-kWDh3jDh-GvgToRlVfwIUFw)
+- [Kevin Davila (Google Developer Expert)](https://www.youtube.com/@KevinDavilaDev/videos)
