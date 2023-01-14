@@ -662,10 +662,26 @@ Angular tiene dos enfoques para trabajar con formularios.
 
    Hay distintas directivas que se usan en los formularios reactivos:
 
-   - FormGroup (x).
+   En este tipo de formularios tenemos un acceso explicito al formulario subyacente, estos son formularios más
+   robustos, más escalables, reutilizables y comprobables.
+
+   Si los formularios son una parte importante de la aplicación o usamos patrones reactivos, es mejor siempre
+   utilizar formularios reactivos.
+
+   - **FormGroup:**
+     Realiza un seguimiento del los mismos valores y estado para una colección de controles de formulario.
    - FormGroupName.
-   - FormControl.
-   - FormControlName (x).
+   - **FormControl:**
+     Realiza un seguimiento del valor y el estado de validación de un control de formulario.
+
+     Administra el valor y el estado de validez de un control de formulario individual. Corresponde a un control de formulario HTML como:
+
+     ```html
+      <input>o <select>
+     ```
+
+   - **FormControlName:**
+     Directiva que voncula cada entrada individual al control de formulario definido en FormGroup.
    - FormArrayName.
 
    Para trabajar en los formularios reactivos debemos importar el módulo necesario en el app-module.
@@ -790,27 +806,38 @@ Angular tiene dos enfoques para trabajar con formularios.
 
    El identificador del formulario lo inicializamos y determinamos que su tipo es el **FormGroup**.
 
-   Luego, en el contructor de la clase, inicializamos una propiedad del tipo **FormBuildeR**
+   Luego, en el contructor de la clase, inyectamos el servicio **FormBuilder**
 
    ```js
     constructor(private readonly fb: FormBuilder) { }
    ```
+
+   Este sercivicio cuenta con tres métodos: **control(), group(), array()**.
 
    En un método cualquiera, a través de la propiedad del tipo FormBuilder, contruimos con el método group, un objeto que define las propiedades (campos) del formulario, asignandoles un array, podemos definir en el primer elemento, su valor inicializador, y en el segundo, su validación o validaciones.
 
    ```js
     initForm(): FormGroup { 
     // Aquí declaramos las propiedades que tendrá el formulario con FormBuilder.
-    // Y sus distintas validaciones.
+    // Iniciando una mátriz, cuyo primer valor es precisamente el valor del campo y el segundo sería una matríz con sus distintas validaciones.
       return this.fb.group({
         name: ['', [Validators.required, Validators.minLength(3)]],
         age: ['', [Validators.required]],
         checkWork: ['', [Validators.required]],
         city: ['', [Validators.required]],
         opinion: ['', [Validators.maxLength(300)]]
+        /*
+          address: this.fb.group({
+            street: [''],
+            state: [''],
+            zip: ['']
+          }),
+        */
       })
     }
    ```
+
+   Es posible definir grupos de formularios dentro de grupos de formularios.
 
    En el ciclo de vida que ejecuta los métodos requeridos para contruir un componente, utilizaremos el método que inicializa el formulario y así finalizariamos el formulario reactivo.
 
@@ -846,6 +873,14 @@ Angular tiene dos enfoques para trabajar con formularios.
     - PatchValue: Permite determinar que propiedades son inicializadas y cuales no.
     - SetValue: Todas las propiedades del formulario bajo este método deben ser inicializados.
 
+3. En resumen.
+
+| |Reactivos| Plantilla|
+|-----------|----------|----------|
+|Configuración del modelo de formulario|Explícito, creado en la clase de componente| Implícito, creado por directivas
+|Modelo de datos|Estructurado e inmutable|Desestructurado y mutable
+|Flujo de datos| Sincrónico | Asincrónico
+|Validación de formulario| Funciones | Directivas
 ---
 
 ## Validaciones ✔
@@ -2191,7 +2226,7 @@ En el componente padre donde se aloja el componente "card", identificamos el sel
 
 ---
 
-## NG-CONTAINER & NG-TEMPLATE 🏗
+## NG-CONTAINER & NG-TEMPLATE  🏗
 
 - NG-CONTAINER: Un elemento qe nos permite tener directivas estructurales sin añadir ningún elemento al DOM.
 
@@ -2225,7 +2260,7 @@ Hasta que no se le indique, Angular no renderizara el elemento "div" en el DOM.
 
 ---
 
-## Decorador ViewChild Decorator
+## Decorador ViewChild
 
 Se trata de un decorador de propiedades, que configura una consulta de vista.
 
@@ -2339,7 +2374,7 @@ Es más correcto manejar los selectores durante el ciclo de vida _**AfterViewIni
 
 ---
 
-## Comunicación entre componentes
+## Comunicación entre componentes 📞
 
 En este caso, se trata de comunicación entre siblings, o sea, que no tienen una relación padre e hijo.
 
@@ -2643,6 +2678,103 @@ Para los elementos que ingresan o salen de una página (insertados o eliminados 
 
 ---
 
+## Internacionalización Angular 🌎
+
+Es el proceso de diseño y preparación del proyecto para su uso en diferentes lugares del mundo, esto incluye las siguientes acciones:
+
+### **Internacionalizacion(i18n)**
+
+- Extraer texto para traducir a diferentes idiomas
+- Dar formato a los datos para una configuración regional específica.
+  
+### **Localización**
+
+- Unidades de medida que incluyen fecha y hora, números y monedas.
+- Nombres traducidos que incluyens zonas horarias, idiomas y países.
+
+1. **Instalar dependencias**
+
+   Ejecutamos el siguiente comando para instalar las dependencias que necesitamos
+
+   ```bash
+    ng add @angular/localize
+   ```
+
+   Luego necesitamos [actualizar el json](https://angular.io/guide/i18n-common-merge#define-locales-in-the-build-configuration).
+
+   ```json
+    "angular_project": {
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "es": {
+            "translation": "src/locale/messages.es.xlf"}
+        }
+      },
+    }
+   ```
+
+   Y dentro de la sección **architect**, dentro de su sección **build**, y respectivamente en su **options**, especificamos lo siguiente:
+
+   ```json
+    "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "localize": ["es", "en-US"],
+          }
+        }
+    }
+   ```
+
+2. OTI (Opportunity to Internationalize)
+
+Oportunidades para internacionalizar.
+
+Ahora seleccionamos todos esos elementos que deseamos traducir.
+
+```html
+<h2 i18n>Hello world</h2>
+```
+
+Creamos el archivo que alojara las traducciones:
+
+```bash
+ng extract-i18n --output-path src/locale
+```
+
+Luego hacemos una copia del archivo dado con la asginación que le dimos en la configuración del "i18n".
+
+Colocamos el siguienete comando en el terminal.
+
+```bash
+cp src/locale/messages.xlf src/locale/messages.es.xlf
+```
+
+Esto nos copiara el archivo "messages" con el siguiente formato
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="es-ES" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="2023484548631819319" datatype="html">
+        <source>Hello world</source>
+        <target>Hola mundo</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
+```
+
+La etiqueta "source" indica el texto de origen, mientras que "target" indica la traducción.
+
+---
+
 ## Angular 15 nuevas características
 
 - ### **Standalone components**
@@ -2724,6 +2856,64 @@ Para los elementos que ingresan o salen de una página (insertados o eliminados 
   Indirectamente proyectando un lazyloading para que se carguen solo cuando los requerimos.
 
   ![Formularios tipados](img-content/Image_directive.png)
+
+  Para aplicarlo en el HTML, debemos reemplazar el atributo src por  **ngSrc**.
+
+  ```html
+    <img ngSrc="cat.jpg">
+  ```
+
+  Es posible que se necesite priorizar la carga de la imagen.
+
+  Para ello debemos marcar el elemento img como **priority**.
+
+  ```html
+    <img ngSrc="cat.jpg" priority>
+  ```
+
+  Esto aplica las siguientes optimizaciones:
+  - fetchpriority=high.
+  - loading=eager.
+  - Genera un elemento de enlace precargado si renderiza en el servidor.
+
+  Para evitar cambios de diseño relacionacos con la imagen, NgOptimizedImage necesita que se especifique la altura y la anchura de la imagen.
+
+  ```html
+    <img ngSrc="cat.jpg" width="400" height="200">
+  ```
+
+  Es importante que dependiendo de tipo de imagen, utilicemos o un tamaño fijo (el tamaño que queremos para la imagen) o si es una imagen sensible (width y height deben tener el tamaño intrínseco del archivo de imagen).
+
+  En caso de queramos que la imagen rellenen un contenedor, debemos utilizar el atributo **fill**.
+
+  ```html
+    <img ngSrc="cat.jpg" fill>
+  ```
+
+  en caso de que los atributos width y height modifiquen el estilo de imagen distorsionando el aspecto, puede usar los valores **auto**.
+
+  ```html
+   <img ngSrc="cat.jpg" width="auto" height="auto">
+  ```
+
+  Para solicitar una imagen, que posteriormente queremos que sus dimesiones se puedan acoplar con las características de la ventana gráfica del usuario, utilizamos el atributo **srcset**, este se basará en el atributo **size** (permite especificar el ancho de una imagen, para cada condición de una lista de medios).
+
+  Esto nos evita descargar una imagen muy grande.
+
+  - Imagenes de tamaño fijo.
+
+    Y podemos moldearlo según deseamos. Si queremos un tamaño fijo (el mismo tamaño en todos los dispositivos), no es necesario establecer un **size** atributo
+
+    ```html
+      <img ... srcset="image-400w.jpg 1x, image-800w.jpg 2x">
+    ```
+
+  - Imagenes receptivas.
+    Si queremos un tamaño freceptivo (variar tamaño según la ventana gráfica), necesitamos definir un atributo **size**.
+
+  ```html
+   <img ngSrc="hero.jpg" ngSrcset="100w, 200w, 300w" sizes="50vw">
+  ```
 
 - ### **Functional router guards**
 
